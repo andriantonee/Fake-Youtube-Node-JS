@@ -1,0 +1,168 @@
+body{
+        font-family: "Cambria"; 
+		background:url('img/bg3.png') no-repeat,url('img/noisy_grid.png');
+    }
+    .navbar-inverse .navbar-nav > li > a {
+        color:white;
+        font-size: 20px;
+    }
+    .navbar-inverse .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
+    color: white;
+}
+    .navbar-inverse .navbar-brand {
+        color: white;
+        margin-right: 190px;
+    }
+    .container{
+        margin-top: 50px;
+        width: 1170px !important;
+    }
+    .atas{
+        <!--border : 1px solid black;-->
+    }
+    .kiri{
+        width: 740px;
+        float: left;
+        height: 570px;
+    }
+    .kanan{
+        width: 328px;
+        float: left;
+        height: 500px;
+        margin-left: 30px;
+        <!--border: 1px dotted blue;-->
+    }
+    .capt1 {
+        margin-left: 420px;
+        bottom: 60px;
+    }
+    .indi1{
+        margin-top :15px;
+        margin-left: 75px;
+        bottom : auto;
+    }
+    .custom1{
+        margin-top: 25px;
+        margin-bottom: 0px;
+        border: 1px solid black;
+        width: 328px; 
+    }
+    .box1{
+        background-image:url('img/transparan.png');
+        padding: 35px;
+        padding-bottom: 0px;
+    }
+    .box2{
+        background: radial-gradient(white,black) no-repeat;
+        margin-top: 0px;
+        padding: 0px;
+    }
+    .box3{
+        background: gray;
+        margin-top: 0px;
+        padding: 10px 0;
+        border-radius: 3px;
+        border: 1px solid black;
+        margin-bottom: 50px;
+        
+        color:white;
+        padding-top: 10px;
+        border-top: 1px solid black;
+        text-align:center;
+    }
+    .kiri1{
+        width: 250px;
+        float: left;
+        <!--border: 1px dashed black;-->
+        margin: 0;
+        padding: 10px 5px;
+    }
+    .kanan1{
+        width: 340px;
+        float: left;
+        padding: 10px 5px;
+        <!--border: 1px dashed black;-->
+    }
+    .tengah1{
+        padding: 10px;
+        float: left;
+        width: 580px;
+        <!--border: 1px dashed black;-->
+        text-align: center;
+    }
+    .tengah1 h3{
+        margin: 15px 0px;
+    }
+    .box3 li{
+        margin: 0 70px;
+    }
+    .box3 li a, .footer{
+        color: yellow;
+        font-size: 18px;
+    }
+    .box3 li a:hover{
+        color: white;
+        text-decoration: none;
+    }
+    .footer{
+        padding-top: 10px;
+        border-top: 1px solid black;
+        text-align:center;
+    }
+    .cuplikan{
+        padding: 10px 35px;
+		background:white;
+    }
+    .dropdown-menu{
+        background-color: gray;
+        font-size: 18px;
+    }
+    .dropdown-menu li a{
+        color: yellow;
+    }
+    .dropdown-menu li a:hover{
+        color: white;
+        background: none;
+    }
+    .dropdown-menu .divider{
+        background-color: black;
+    }
+    .table{
+        background: white;
+        width: 326px;
+        margin-bottom: 0px;   
+    }
+    .table th{
+        background: gray;
+        color: white;
+    }
+    .table thead tr th{
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+    }
+    .table tbody tr td{
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+    }
+    .table2 tbody tr td{
+        padding: 2px;
+        margin: 0px;
+    }
+    .custom2{
+        margin: 10px 5px; 
+        width: 240px;
+    }
+    .panel-heading{
+        background: gray;
+        color: white;
+    }
+    .panel{
+        border: 1px black solid;
+        border-radius: 5px;
+        border-bottom: 0px; 
+    }
+    .panel-body{
+        padding: 0px;
+        margin: 0px;
+        margin-bottom: 0px;
+    }
