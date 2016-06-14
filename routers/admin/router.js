@@ -1,10 +1,12 @@
-var express = require('express'),
-	r = express.Router(),
-	h = require('../../handlers/admin/handler'),
+var h = require('../../handlers/admin/handler'),
 	router;
 
-router = function(app){
-	r.get('/', h.home);
+router = function(app, express){
+	var r = express.Router();
+
+	r.get('/', h.login);
+	r.get('/home', h.home);
 	app.use(r);
 };
+
 module.exports = router;
