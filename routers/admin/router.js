@@ -6,7 +6,8 @@ router = function(app, express){
 
 	r.get('/', h.login);
 	r.get('/home', h.home);
-	app.use(r);
+	r.post('/authentication', h.authentication);
+	app.use(r);	
 };
 
 module.exports = router;
