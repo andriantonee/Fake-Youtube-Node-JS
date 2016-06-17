@@ -8,7 +8,7 @@ var knex = require('knex')({
 		}
 	}),
 	jwt = require('jsonwebtoken'),
-	config = require('../../config/admin/config');
+	config = require('../config/admin');
 
 var variabel_home = {
 		header : {
@@ -32,14 +32,14 @@ authentication = function(req, res){
 			if (rows.length === 0){
 				res.json({
 					success : false,
-					message : 'username atau password salah'
+					message : 'Username atau Password salah !'
 				});
 			}
 			else if (rows) {
 				if (rows[0].password != req.body.password){
 					res.json({
 						success : false,
-						message : 'username atau password salah'
+						message : 'Username atau Password salah !'
 					});
 				}
 				else{
@@ -60,7 +60,7 @@ authentication = function(req, res){
 							})
 							.json({
 								success: true,
-								message: 'Authentication success.'
+								message: 'Authentication success !'
 							})
 					}
 				}
@@ -69,7 +69,24 @@ authentication = function(req, res){
 };
 
 login = function(req, res){
-	res.render('./admin/pages/login/login.html', {variabel_login : variabel_login});
+	var token = req.cookies.tid;
+
+	if (token !== undefined){
+		jwt.verify(token, config.secret, function(err, decoded) {      
+      		if (err){
+      			res.clearCookie('tid')
+        		   .render('./admin/pages/login/login.html', {variabel_login : variabel_login});
+			}
+			else{
+				// req.decoded = decoded;
+				res.redirect('/hidden/home');
+      		}
+    	});
+	}
+	else{
+		res.clearCookie('tid')
+           .render('./admin/pages/login/login.html', {variabel_login : variabel_login});;
+	}
 };
 
 home = function(req, res){
@@ -79,17 +96,16 @@ home = function(req, res){
 		jwt.verify(token, config.secret, function(err, decoded) {      
       		if (err){
       			res.clearCookie('tid')
-        		   .redirect('/');
+        		   .redirect('/hidden');
 			}
 			else{
-				req.decoded = decoded;    
+				// req.decoded = decoded;
 				res.render('./admin/pages/home/home.html', {variabel_home : variabel_home});
-				// next();
       		}
     	});
 	}
 	else{
-		res.redirect('/');
+		res.redirect('/hidden');
 	}
 };
 

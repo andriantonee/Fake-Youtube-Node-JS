@@ -1,4 +1,4 @@
-var router = require('../../routers/admin/router'),
+var router = require('../routers'),
 	nunjucks = require('nunjucks'),
 	bodyParser = require('body-parser'),
 	cookieParser = require('cookie-parser'),
@@ -14,7 +14,8 @@ middleware = function(app, globdir, express){
 	}));
 	app.use(cookieParser());
 
-	router(app, express);
+	router.admin(app, express);
+	router.user(app, express);
 
 	nunjucks.configure('app',{
 		autoescape: true,

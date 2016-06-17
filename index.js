@@ -1,6 +1,6 @@
 var globaldir = __dirname,
 	express = require('express'),
-	middleware = require('./middlewares/admin/middleware'),
+	middleware = require('./middlewares'),
 	app = express();
 
 middleware(app, globaldir, express);
