@@ -1,5 +1,5 @@
 home = function(req, res){
-	res.render('./user/home/home.html', {});
+	res.render('./user/pages/home/home.html', {});
 };
 
 handler = {
