@@ -90,7 +90,7 @@ var func_login = function (){
 					}
 				}
 			}
-		})
+		});
 	};
 
 $('button[name=login]').click(function(){ func_login() });

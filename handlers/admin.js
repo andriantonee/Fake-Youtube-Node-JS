@@ -10,17 +10,57 @@ var knex = require('knex')({
 	jwt = require('jsonwebtoken'),
 	config = require('../config/admin');
 
-var variabel_home = {
+login = function(req, res){
+	var token = req.cookies.tid;
+
+	if (token !== undefined){
+		jwt.verify(token, config.secret, function(err, decoded) {      
+      		if (err){
+      			res.clearCookie('tid')
+        		   .render('./admin/pages/login/login.html', {});
+			}
+			else{
+				// req.decoded = decoded;
+				res.redirect('/hidden/home');
+      		}
+    	});
+	}
+	else{
+		res.clearCookie('tid')
+           .render('./admin/pages/login/login.html', {});;
+	}
+};
+
+home = function(req, res){
+	var home = {
 		header : {
+			header_notification : {
+				"username" : "undefined"
+			},
 			sidebar : {
 				"index.html" : "active"
 			}
-		},
+		}
 	};
 
-var variabel_login = {
+	var token = req.cookies.tid;
 
-	};
+	if (token !== undefined){
+		jwt.verify(token, config.secret, function(err, decoded) {      
+      		if (err){
+      			res.clearCookie('tid')
+        		   .redirect('/hidden');
+			}
+			else{
+				home.header.header_notification["username"] = decoded.username;
+				res.render('./admin/pages/home/home.html', {home : home});
+      		}
+    	});
+	}
+	else{
+		res.redirect('/hidden');
+	}
+};
 
 authentication = function(req, res){
 	knex.select('username', 'password')
@@ -68,51 +108,23 @@ authentication = function(req, res){
 		});
 };
 
-login = function(req, res){
+logout = function(req, res){
 	var token = req.cookies.tid;
 
 	if (token !== undefined){
-		jwt.verify(token, config.secret, function(err, decoded) {      
-      		if (err){
-      			res.clearCookie('tid')
-        		   .render('./admin/pages/login/login.html', {variabel_login : variabel_login});
-			}
-			else{
-				// req.decoded = decoded;
-				res.redirect('/hidden/home');
-      		}
-    	});
-	}
-	else{
 		res.clearCookie('tid')
-           .render('./admin/pages/login/login.html', {variabel_login : variabel_login});;
-	}
-};
-
-home = function(req, res){
-	var token = req.cookies.tid;
-
-	if (token !== undefined){
-		jwt.verify(token, config.secret, function(err, decoded) {      
-      		if (err){
-      			res.clearCookie('tid')
-        		   .redirect('/hidden');
-			}
-			else{
-				// req.decoded = decoded;
-				res.render('./admin/pages/home/home.html', {variabel_home : variabel_home});
-      		}
-    	});
+	       .redirect('/hidden');
 	}
 	else{
-		res.redirect('/hidden');
+		res.redirect('/hidden')
 	}
 };
 
 handler = {
 	login: login,
 	home: home,
-	authentication: authentication
+	authentication: authentication,
+	logout : logout
 };
 
 module.exports = handler;
