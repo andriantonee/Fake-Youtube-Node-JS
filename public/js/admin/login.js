@@ -1,8 +1,8 @@
 var func_login = function (){
 		var data = {
-			username : $('input[name=username]').val() || "",
-			password : $('input[name=password]').val() || ""
-		};
+				username : $('input[name=username]').val() || "",
+				password : $('input[name=password]').val() || ""
+			};
 		
 		if (data.username === ""){
 			$("input[name=username]").focus();
