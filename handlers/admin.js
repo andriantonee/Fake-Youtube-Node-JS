@@ -1,4 +1,14 @@
-var knex = require('knex')({
+var active_sidebar = function(){
+		var obj = {
+			"dashboard" : "",
+			"music" : "",
+			"music_category" : "",
+			"music_list" : ""
+		};
+
+		return obj;
+	},
+	knex = require('knex')({
 		client: 'mysql',
 		connection: {
 			host     : '127.0.0.1',
@@ -33,15 +43,16 @@ login = function(req, res){
 
 home = function(req, res){
 	var home = {
-		header : {
-			header_notification : {
-				"username" : "undefined"
-			},
-			sidebar : {
-				"index.html" : "active"
+			header : {
+				header_notification : {
+					"username" : "undefined"
+				},
+				active_sidebar : active_sidebar()
 			}
-		}
-	};
+		};
+
+	/* Untuk menandakan bahwa sidebar sedang aktif dibagian mana */
+	home.header.active_sidebar.dashboard = "active";
 
 	var token = req.cookies.tid;
 
@@ -61,6 +72,39 @@ home = function(req, res){
 		res.redirect('/hidden');
 	}
 };
+
+music_category = function(req, res){
+	var music_category = {
+			header : {
+				header_notification : {
+					"username" : "undefined"
+				},
+				active_sidebar : active_sidebar()
+			}
+		};
+
+	/* Untuk menandakan bahwa sidebar sedang aktif dibagian mana */
+	music_category.header.active_sidebar.music = "in";
+	music_category.header.active_sidebar.music_category = "active";
+
+	var token = req.cookies.tid;
+
+	if (token !== undefined){
+		jwt.verify(token, config.secret, function(err, decoded) {      
+      		if (err){
+      			res.clearCookie('tid')
+        		   .redirect('/hidden');
+			}
+			else{
+				music_category.header.header_notification["username"] = decoded.username;
+				res.render('./admin/pages/music/music_category.html', {music_category : music_category});
+      		}
+    	});
+	}
+	else{
+		res.redirect('/hidden');
+	}
+}
 
 authentication = function(req, res){
 	knex.select('username', 'password')
@@ -121,9 +165,10 @@ logout = function(req, res){
 };
 
 handler = {
-	login: login,
-	home: home,
-	authentication: authentication,
+	login : login,
+	home : home,
+	music_category : music_category,
+	authentication : authentication,
 	logout : logout
 };
 
