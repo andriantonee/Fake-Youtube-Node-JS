@@ -30,7 +30,6 @@ login = function(req, res){
         		   .render('./admin/pages/login/login.html', {});
 			}
 			else{
-				// req.decoded = decoded;
 				res.redirect('/hidden/home');
       		}
     	});
@@ -49,12 +48,11 @@ home = function(req, res){
 				},
 				active_sidebar : active_sidebar()
 			}
-		};
+		},
+		token = req.cookies.tid;
 
 	/* Untuk menandakan bahwa sidebar sedang aktif dibagian mana */
 	home.header.active_sidebar.dashboard = "active";
-
-	var token = req.cookies.tid;
 
 	if (token !== undefined){
 		jwt.verify(token, config.secret, function(err, decoded) {      
@@ -80,14 +78,14 @@ music_category = function(req, res){
 					"username" : "undefined"
 				},
 				active_sidebar : active_sidebar()
-			}
-		};
+			},
+			music_category_table : []
+		},
+		token = req.cookies.tid;;
 
 	/* Untuk menandakan bahwa sidebar sedang aktif dibagian mana */
 	music_category.header.active_sidebar.music = "in";
 	music_category.header.active_sidebar.music_category = "active";
-
-	var token = req.cookies.tid;
 
 	if (token !== undefined){
 		jwt.verify(token, config.secret, function(err, decoded) {      
@@ -97,7 +95,17 @@ music_category = function(req, res){
 			}
 			else{
 				music_category.header.header_notification["username"] = decoded.username;
-				res.render('./admin/pages/music/music_category.html', {music_category : music_category});
+				
+				knex.select('category')
+					.table('music_category')
+					.orderBy('tanggal_waktu')
+					.then(function(rows){
+						music_category.music_category_table = rows;
+						res.render('./admin/pages/music/music_category.html', {music_category : music_category});
+					})
+					.catch(function(err){
+						res.render('./admin/pages/music/music_category.html', {music_category : music_category});
+					});
       		}
     	});
 	}
@@ -145,10 +153,16 @@ authentication = function(req, res){
 							.json({
 								success: true,
 								message: 'Authentication success !'
-							})
+							});
 					}
 				}
 			}
+		})
+		.catch(function(err){
+			res.json({
+				success : false,
+				message : 'Something error occured'
+			});
 		});
 };
 
@@ -160,7 +174,59 @@ logout = function(req, res){
 	       .redirect('/hidden');
 	}
 	else{
-		res.redirect('/hidden')
+		res.redirect('/hidden');
+	}
+};
+
+
+music_category_add = function(req, res){
+	var token = req.cookies.tid;
+
+	if (token !== undefined){
+		jwt.verify(token, config.secret, function(err, decoded) {      
+      		if (err){
+      			res.clearCookie('tid')
+        		   .redirect('/hidden');
+			}
+			else{
+				knex.select()
+					.table('music_category')
+					.where({
+						category: req.body.music_category
+					})
+					.then(function(rows){
+						if (rows.length === 0){
+							knex('music_category')
+								.insert({
+									category : req.body.music_category,
+									tanggal_waktu : new Date(Date.now()),
+									user : decoded.username
+								})
+								.then(function(music_category){
+									res.json({
+										success : true,
+										message : 'data berhasil diinput'
+									});
+								})
+								.catch(function(err){
+									res.json({
+										success : false,
+										message : 'data tidak berhasil diinput'
+									});
+								});
+						}
+					})
+					.catch(function(err){
+						res.json({
+							success : false,
+							message : 'table tidak ditemukan'
+						});
+					});
+      		}
+    	});
+	}
+	else{
+		res.redirect('/hidden');
 	}
 };
 
@@ -169,7 +235,8 @@ handler = {
 	home : home,
 	music_category : music_category,
 	authentication : authentication,
-	logout : logout
+	logout : logout,
+	music_category_add : music_category_add
 };
 
 module.exports = handler;
