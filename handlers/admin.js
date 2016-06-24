@@ -205,21 +205,27 @@ music_category_add = function(req, res){
 								.then(function(music_category){
 									res.json({
 										success : true,
-										message : 'data berhasil diinput'
+										message : 'Data telah berhasil diinput !'
 									});
 								})
 								.catch(function(err){
 									res.json({
 										success : false,
-										message : 'data tidak berhasil diinput'
+										message : 'Maaf, terjadi kesalahan pada saat penginputan data.'
 									});
 								});
+						}
+						else{
+							res.json({
+								success : false,
+								message : "Category " + req.body.music_category + " sudah terdaftar. Jika pada tabel dibawah tidak tercantum silahkan melakukan refresh page."
+							})
 						}
 					})
 					.catch(function(err){
 						res.json({
 							success : false,
-							message : 'table tidak ditemukan'
+							message : 'Maaf, terjadi kesalahan pada saat penginputan data.'
 						});
 					});
       		}

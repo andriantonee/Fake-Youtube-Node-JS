@@ -5,6 +5,20 @@ var add_music_category = function(){
 
 		if (data.music_category === ""){
 			$("input[name=input_music_category]").focus();
+
+			if ($( '#div-row-alert-form-category' ).length === 0){
+				$( '<div id="div-row-alert-form-category" class="row">' +
+		               '<div class="col-lg-12">' +
+		                   '<div id="div-row-alert-messsage-form-category" class="alert alert-danger">' +
+		                       'Category masih kosong !' +
+		                   '</div>' +
+		               '</div>' +
+		           '</div>' ).insertBefore( '#div-row-form-music-category' );
+			}
+			else{
+				$(' #div-row-alert-messsage-form-category ').html('Category masih kosong !');
+			}
+
 			return false;
 		}
 
@@ -18,7 +32,20 @@ var add_music_category = function(){
 					location.replace(window.location.origin + '/hidden/music/category');
 				}
 				else{
-					alert(res.message);
+					$("input[name=input_music_category]").focus();
+					
+					if ($( '#div-row-alert-form-category' ).length === 0){
+						$( '<div id="div-row-alert-form-category" class="row">' +
+				               '<div class="col-lg-12">' +
+				                   '<div id="div-row-alert-messsage-form-category" class="alert alert-danger">' +
+				                       'Category masih kosong !' +
+				                   '</div>' +
+				               '</div>' +
+				           '</div>' ).insertBefore( '#div-row-form-music-category' );
+					}
+					else{
+						$(' #div-row-alert-messsage-form-category ').html(res.message);
+					}
 				}
 			}
 		});
