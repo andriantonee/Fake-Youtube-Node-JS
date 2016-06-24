@@ -30,6 +30,32 @@
 .container-fluid{
 	background-color:black;
 }
+.tmpplay{
+	width: 82%;
+    margin-left: 10%;
+    margin-top: 1%;
+}
+#plyer{
+	margin-left: 0.5%;
+}
+#jdlply{
+	float:left;
+}
+#btnlike{
+	float:right;
+}
+.contplay{
+	width:97%;
+	margin-left: 0.5%;
+}
+.contplay1{
+	clear:both;
+	margin-left: 0.5%;
+}
+
+#plylist{
+	margin:1%;
+}
 #footerone{
 	float:left;
 	width:40%;
