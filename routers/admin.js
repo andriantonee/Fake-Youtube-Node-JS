@@ -10,6 +10,7 @@ router = function(app, express){
 	r.post('/hidden/authentication', h.admin.authentication);
 	r.post('/hidden/logout', h.admin.logout);
 	r.post('/hidden/music/category/add', h.admin.music_category_add);
+	r.post('/hidden/music/category/delete', h.admin.music_category_delete);
 	app.use(r);	
 };
 
