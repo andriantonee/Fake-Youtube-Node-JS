@@ -1,0 +1,32 @@
+{% extends "../index.html" %}
+{% import "../../widgets/navbar/navbar.html" as navbar %}
+{% import "../../widgets/tab_content_music_category/tab_content_music_category.html" as tab_content_music_category %}
+
+{% block title %}Music Category{% endblock %}
+
+{% block CSS %}
+	<!-- Bootstrap Core CSS -->
+    <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="/css/user/bootstrap.min.css" rel="stylesheet"> -->
+
+    <!-- User CSS -->
+    <link href="/css/user/style.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    {{ navbar.main() }}
+
+    {{ tab_content_music_category.main(music_category["tab_content_music_category"]) }}
+
+    <div class="container-fluid text-center">
+        CopyRight &copy;2016 Vevo
+    </div>
+{% endblock %}
+
+{% block JS %}
+	<!-- jQuery -->
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+{% endblock %}
