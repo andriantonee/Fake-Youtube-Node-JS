@@ -218,7 +218,7 @@ music_category_add = function(req, res){
 						else{
 							res.json({
 								success : false,
-								message : "Category " + req.body.music_category + " sudah terdaftar. Jika pada tabel dibawah tidak tercantum silahkan melakukan refresh page."
+								message : 'Category ' + req.body.music_category + ' sudah terdaftar. Jika pada tabel dibawah tidak tercantum silahkan melakukan refresh page.'
 							})
 						}
 					})
@@ -236,13 +236,78 @@ music_category_add = function(req, res){
 	}
 };
 
+music_category_delete = function(req, res){
+	var token = req.cookies.tid;
+
+	if (token !== undefined){
+		jwt.verify(token, config.secret, function(err, decoded) {      
+      		if (err){
+      			res.clearCookie('tid')
+        		   .redirect('/hidden');
+			}
+			else{
+				knex.select()
+					.table('music_category')
+					.where({
+						category: req.body.music_category
+					})
+					.then(function(rows){
+						if (rows.length === 0){
+							res.json({
+								success : false,
+								message : 'Category ' + req.body.music_category + ' tidak terdaftar. Jika pada tabel dibawah tercantum silahkan melakukan refresh page.'
+							});
+						}
+						else{
+							knex('music_category')
+								.where({
+									category : req.body.music_category
+								})
+								.del()
+								.then(function(success){
+									if (success === 1){
+										res.json({
+											success : true,
+											message : 'Data telah berhasil dihapus !'
+										});
+									}
+									else{
+										res.json({
+											success : false,
+											message : 'Maaf, terjadi kesalahan pada saat penghapusan data.'
+										})
+									}
+								})
+								.catch(function(err){
+									res.json({
+										success : false,
+										message : 'Maaf, terjadi kesalahan pada saat penghapusan data.'
+									});
+								});
+						}
+					})
+					.catch(function(err){
+						res.json({
+							success : false,
+							message : 'Maaf, terjadi kesalahan pada saat penghapusan data.'
+						});
+					});
+      		}
+    	});
+	}
+	else{
+		res.redirect('/hidden');
+	}
+};
+
 handler = {
 	login : login,
 	home : home,
 	music_category : music_category,
 	authentication : authentication,
 	logout : logout,
-	music_category_add : music_category_add
+	music_category_add : music_category_add,
+	music_category_delete : music_category_delete
 };
 
 module.exports = handler;

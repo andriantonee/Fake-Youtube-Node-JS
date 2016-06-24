@@ -352,3 +352,8 @@ table.dataTable thead .sorting:after {
 .panel-yellow a:hover {
     color: #df8a13;
 }
+
+/* Tambahan selain dari sb-admin */
+.cursor-pointer {
+    cursor: pointer;
+}
