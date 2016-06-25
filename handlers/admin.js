@@ -112,7 +112,41 @@ music_category = function(req, res){
 	else{
 		res.redirect('/hidden');
 	}
-}
+};
+
+music_list = function(req, res){
+	var music_list = {
+			header : {
+				header_notification : {
+					"username" : "undefined"
+				},
+				active_sidebar : active_sidebar()
+			},
+			music_category_table : []
+		},
+		token = req.cookies.tid;;
+
+	/* Untuk menandakan bahwa sidebar sedang aktif dibagian mana */
+	music_list.header.active_sidebar.music = "in";
+	music_list.header.active_sidebar.music_list = "active";
+
+	if (token !== undefined){
+		jwt.verify(token, config.secret, function(err, decoded) {      
+      		if (err){
+      			res.clearCookie('tid')
+        		   .redirect('/hidden');
+			}
+			else{
+				music_list.header.header_notification["username"] = decoded.username;
+
+				res.render('./admin/pages/music/music_list.html', {music_list : music_list});
+      		}
+    	});
+	}
+	else{
+		res.redirect('/hidden');
+	}
+};
 
 authentication = function(req, res){
 	knex.select('username', 'password')
@@ -300,14 +334,24 @@ music_category_delete = function(req, res){
 	}
 };
 
+upload = function(req, res){
+	console.log(req.body); // form fields
+    console.log(req.file); // form files
+    res.json({
+    	success : true
+    });
+};
+
 handler = {
 	login : login,
 	home : home,
 	music_category : music_category,
+	music_list : music_list,
 	authentication : authentication,
 	logout : logout,
 	music_category_add : music_category_add,
-	music_category_delete : music_category_delete
+	music_category_delete : music_category_delete,
+	upload : upload
 };
 
 module.exports = handler;

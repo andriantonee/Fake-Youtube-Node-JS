@@ -1,8 +1,7 @@
 {% extends "../index.html" %}
 {% import "../../widgets/header/header.html" as header %}
-{% import "./utils/music_category_table.html" as music_category_table %}
 
-{% block title %}Music Category{% endblock %}
+{% block title %}Music List{% endblock %}
 
 {% block CSS %}
 	<!-- Bootstrap Core CSS -->
@@ -33,18 +32,18 @@
 
 {% block content %}
     <div id="wrapper">
-        {{ header.main(music_category["header"]) }}
+        {{ header.main(music_list["header"]) }}
 
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Music Category</h1>
+                    <h1 class="page-header">Music List</h1>
                 </div>
             </div>
 
             <div id="div-row-form-music-category" class="row">
                 <div class="col-lg-4">
-                    <form role="form">
+                    <!-- <form role="form">
                         <div class="form-group">
                             <label class="control-label">Category</label>
                             <div class="row">
@@ -55,8 +54,10 @@
                                 <button class="btn btn-danger" type="button" name="delete_music_category">Delete</button>
                             </div>
                         </div>
-
-                        {{ music_category_table.main(music_category["music_category_table"]) }}
+                    </form> -->
+                    <form name="photo" id="imageUploadForm" enctype="multipart/form-data" method="post">
+                        <input type="file" id="ImageBrowse" name="image" size="30"/>
+                        <input type="submit" name="upload" value="Upload" />
                     </form>
                 </div>
             </div>
@@ -83,11 +84,32 @@
     <script src="/js/admin/sb-admin-2.js"></script>
 
     <!-- Music Category JavaScript -->
-    <script src="/js/admin/music_category.js"></script>
+    <script src="/js/admin/music_list.js"></script>
 
     <!-- Logout JavaScript -->
     <script src="/js/admin/logout.js"></script>
 
     <!-- Href JavaScript -->
     <script src="/js/admin/href.js"></script>
+
+    <script type="text/javascript">
+        $( 'input[name=upload]' ).click(function(){
+            var fileInput = $( '#ImageBrowse' )[0];
+            var file = fileInput.files[0];
+            var formData = new FormData();
+            formData.append('image', file);
+
+            $.ajax({
+                method : 'POST',
+                async : false,
+                data : formData,
+                url : window.location.origin + '/upload',
+                success : function(res){
+                    console.log("success");
+                },
+                contentType: false,
+                processData : false
+            })
+        });
+    </script>
 {% endblock %}
