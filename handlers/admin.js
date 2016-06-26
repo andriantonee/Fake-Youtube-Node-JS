@@ -1,7 +1,9 @@
 var active_sidebar = function(){
 		var obj = {
 			"dashboard" : "",
-			"music" : "",
+			"music_li" : "",
+			"music_li_a" : "",
+			"music_li_a_ul" : "",
 			"music_category" : "",
 			"music_list" : ""
 		};
@@ -81,10 +83,12 @@ music_category = function(req, res){
 			},
 			music_category_table : []
 		},
-		token = req.cookies.tid;;
+		token = req.cookies.tid;
 
 	/* Untuk menandakan bahwa sidebar sedang aktif dibagian mana */
-	music_category.header.active_sidebar.music = "in";
+	music_category.header.active_sidebar.music_li = "class=active";
+	music_category.header.active_sidebar.music_li_a = "aria-expanded=true";
+	music_category.header.active_sidebar.music_li_a_ul = "in";
 	music_category.header.active_sidebar.music_category = "active";
 
 	if (token !== undefined){
@@ -122,12 +126,14 @@ music_list = function(req, res){
 				},
 				active_sidebar : active_sidebar()
 			},
-			music_category_table : []
+			music_category_combobox : []
 		},
-		token = req.cookies.tid;;
+		token = req.cookies.tid;
 
 	/* Untuk menandakan bahwa sidebar sedang aktif dibagian mana */
-	music_list.header.active_sidebar.music = "in";
+	music_list.header.active_sidebar.music_li = "class=active";
+	music_list.header.active_sidebar.music_li_a = "aria-expanded=true";
+	music_list.header.active_sidebar.music_li_a_ul = "in";
 	music_list.header.active_sidebar.music_list = "active";
 
 	if (token !== undefined){
@@ -139,7 +145,76 @@ music_list = function(req, res){
 			else{
 				music_list.header.header_notification["username"] = decoded.username;
 
-				res.render('./admin/pages/music/music_list.html', {music_list : music_list});
+				knex.select('category')
+					.table('music_category')
+					.orderBy('tanggal_waktu')
+					.then(function(rows){
+						if (rows.length === 0){
+							res.render('./admin/pages/music/music_list.html', {music_list : music_list});
+						}
+						else{
+							res.redirect('/hidden/music/list/' + rows[0].category);
+						}
+					})
+					.catch(function(err){
+						res.render('./admin/pages/music/music_list.html', {music_list : music_list});
+					});
+				
+      		}
+    	});
+	}
+	else{
+		res.redirect('/hidden');
+	}
+};
+
+music_list_category = function(req, res){
+	var music_list = {
+			header : {
+				header_notification : {
+					"username" : "undefined"
+				},
+				active_sidebar : active_sidebar()
+			},
+			music_category_combobox : []
+		},
+		token = req.cookies.tid;
+
+	/* Untuk menandakan bahwa sidebar sedang aktif dibagian mana */
+	music_list.header.active_sidebar.music_li = "class=active";
+	music_list.header.active_sidebar.music_li_a = "aria-expanded=true";
+	music_list.header.active_sidebar.music_li_a_ul = "in";
+	music_list.header.active_sidebar.music_list = "active";
+
+	if (token !== undefined){
+		jwt.verify(token, config.secret, function(err, decoded) {      
+      		if (err){
+      			res.clearCookie('tid')
+        		   .redirect('/hidden');
+			}
+			else{
+				music_list.header.header_notification["username"] = decoded.username;
+
+				knex.select('category')
+					.table('music_category')
+					.orderBy('tanggal_waktu')
+					.then(function(rows){
+						music_list.music_category_combobox = rows;
+						for(i = 0; i < music_list.music_category_combobox.length; i++){
+							if(music_list.music_category_combobox[i].category === req.params["category"]){
+								music_list.music_category_combobox[i].selected = "selected=selected";
+							}
+							else{
+								music_list.music_category_combobox[i].selected = "";
+							}
+						};
+						
+						res.render('./admin/pages/music/music_list.html', {music_list : music_list});
+					})
+					.catch(function(err){
+						res.render('./admin/pages/music/music_list.html', {music_list : music_list});
+					});
+				
       		}
     	});
 	}
@@ -334,24 +409,83 @@ music_category_delete = function(req, res){
 	}
 };
 
-upload = function(req, res){
-	console.log(req.body); // form fields
-    console.log(req.file); // form files
-    res.json({
-    	success : true
-    });
+music_list_add = function(req, res){
+	var token = req.cookies.tid;
+
+	if (token !== undefined){
+		jwt.verify(token, config.secret, function(err, decoded) {      
+      		if (err){
+      			res.clearCookie('tid')
+        		   .redirect('/hidden');
+			}
+			else{
+				knex.select()
+					.table('music_list')
+					.where({
+						music_title: req.body.music_title,
+						music_singer: req.body.music_singer
+					})
+					.then(function(rows){
+						if (rows.length === 0){
+							knex('music_list')
+								.insert({
+									music_category : req.body.music_category,
+									music_title : req.body.music_title,
+									music_singer : req.body.music_singer,
+									album_image_filename : req.file !== undefined ? req.file.filename : "",
+									album_image_originalname : req.file !== undefined ? req.file.originalname : "No Image",
+									tanggal_waktu : new Date(Date.now()),
+									user : decoded.username
+								})
+								.then(function(music_category){
+									res.json({
+										success : true,
+										message : 'Data telah berhasil diinput !'
+									});
+								})
+								.catch(function(err){
+									res.json({
+										success : false,
+										message : 'Maaf, terjadi kesalahan pada saat penginputan data.'
+									});
+								});
+						}
+						else{
+							res.json({
+								success : false,
+								message : 'Music dengan judul ' + req.body.music_title + '  dan penyanyi ' + req.body.music_singer + ' sudah terdaftar. Jika pada tabel dibawah tidak tercantum silahkan melakukan refresh page.'
+							})
+						}
+					})
+					.catch(function(err){
+						res.json({
+							success : false,
+							message : 'Maaf, terjadi kesalahan pada saat penginputan data.'
+						});
+					});
+      		}
+    	});
+	}
+	else{
+		res.redirect('/hidden');
+	}
+	// console.log(req.file);
+	// console.log(req.body.music_category);
+	// console.log(req.body.music_title);
+	// console.log(req.body.music_singer);
 };
 
 handler = {
 	login : login,
 	home : home,
 	music_category : music_category,
+	music_list_category : music_list_category,
 	music_list : music_list,
 	authentication : authentication,
 	logout : logout,
 	music_category_add : music_category_add,
 	music_category_delete : music_category_delete,
-	upload : upload
+	music_list_add : music_list_add
 };
 
 module.exports = handler;

@@ -6,9 +6,9 @@
                 <li>
                     <a href="" id="dashboard" class="{{ sidebar["dashboard"] }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                 </li>
-                <li>
-                    <a href=""><i class="fa fa-music fa-fw"></i> Music<span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level {{ sidebar["music"] }}">
+                <li {{ sidebar["music_li"] }}>
+                    <a href="" {{ sidebar["music_li_a"] }}><i class="fa fa-music fa-fw"></i> Music<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level {{ sidebar["music_li_a_ul"] }}">
                         <li>
                             <a href="" id="music_category" class="{{ sidebar["music_category"] }}">Music Category</a>
                         </li>
