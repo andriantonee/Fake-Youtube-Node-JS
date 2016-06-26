@@ -1,5 +1,6 @@
 {% extends "../index.html" %}
 {% import "../../widgets/header/header.html" as header %}
+{% import "./utils/music_list_table.html" as music_list_table %}
 
 {% block title %}Music List{% endblock %}
 
@@ -41,7 +42,7 @@
                 </div>
             </div>
 
-            <div id="div-row-form-music-category" class="row">
+            <div id="div-row-form-music-list" class="row">
                 <div class="col-lg-4">
                     <form role="form">
                         <div class="form-group">
@@ -77,27 +78,7 @@
                     </form>
                 </div>
                 <div class="col-lg-8">
-                    <div class="form-group">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Music Title</th>
-                                        <th>Music Singer</th>
-                                        <th>Album Image</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="cursor-pointer">
-                                        <td>1</td>
-                                        <td>ASDASD</td>
-                                        <td>ASDAD</td>
-                                        <td><a href="">Image</a></td>
-                                <tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {{ music_list_table.main(music_list["music_list_table"]) }}
                 </div>
             </div>
         </div>

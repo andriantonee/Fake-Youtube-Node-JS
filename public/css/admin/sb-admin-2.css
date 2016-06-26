@@ -357,3 +357,9 @@ table.dataTable thead .sorting:after {
 .cursor-pointer {
     cursor: pointer;
 }
+
+.div-img-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

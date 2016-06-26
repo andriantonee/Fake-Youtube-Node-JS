@@ -126,7 +126,8 @@ music_list = function(req, res){
 				},
 				active_sidebar : active_sidebar()
 			},
-			music_category_combobox : []
+			music_category_combobox : [],
+			music_list_table : []
 		},
 		token = req.cookies.tid;
 
@@ -176,7 +177,8 @@ music_list_category = function(req, res){
 				},
 				active_sidebar : active_sidebar()
 			},
-			music_category_combobox : []
+			music_category_combobox : [],
+			music_list_table : []
 		},
 		token = req.cookies.tid;
 
@@ -193,28 +195,66 @@ music_list_category = function(req, res){
         		   .redirect('/hidden');
 			}
 			else{
-				music_list.header.header_notification["username"] = decoded.username;
-
-				knex.select('category')
+				knex.select()
 					.table('music_category')
-					.orderBy('tanggal_waktu')
-					.then(function(rows){
-						music_list.music_category_combobox = rows;
-						for(i = 0; i < music_list.music_category_combobox.length; i++){
-							if(music_list.music_category_combobox[i].category === req.params["category"]){
-								music_list.music_category_combobox[i].selected = "selected=selected";
-							}
-							else{
-								music_list.music_category_combobox[i].selected = "";
-							}
-						};
-						
-						res.render('./admin/pages/music/music_list.html', {music_list : music_list});
+					.where({
+						category : req.params["category"]
 					})
-					.catch(function(err){
-						res.render('./admin/pages/music/music_list.html', {music_list : music_list});
+					.then(function(rows){
+						if (rows.length === 0){
+							/* mau render page 404 not found */
+							// res.status(404);
+						}
+						else{
+							music_list.header.header_notification["username"] = decoded.username;
+
+							knex.select('category')
+								.table('music_category')
+								.orderBy('tanggal_waktu')
+								.then(function(rows){
+									music_list.music_category_combobox = rows;
+									for(i = 0; i < music_list.music_category_combobox.length; i++){
+										if(music_list.music_category_combobox[i].category === req.params["category"]){
+											music_list.music_category_combobox[i].selected = "selected=selected";
+										}
+										else{
+											music_list.music_category_combobox[i].selected = "";
+										}
+									};
+
+									knex.select('music_title','music_singer','album_image_filename','album_image_originalname')
+										.table('music_list')
+										.where({
+											music_category : req.params["category"]
+										})
+										.orderBy('tanggal_waktu')
+										.then(function(rows){
+											// for(i = 0; i < rows.length; i++){
+											// 	var obj = {};
+											// 	obj.music_title = rows[i].music_title;
+											// 	obj.music_singer = rows[i].music_singer;
+											// 	if(rows[i].album_image_originalname !== 'No Image'){
+											// 		obj.album_image = "<a href=img/" + rows[i].album_image_filename + ">" + rows[i].album_image_originalname + "</a>";
+											// 	}
+											// 	else{
+											// 		obj.album_image = rows[i].album_image_originalname;
+											// 	}
+
+											// 	music_list.music_list_table.push(obj);
+											// };
+											music_list.music_list_table = rows;
+
+											res.render('./admin/pages/music/music_list.html', {music_list : music_list});
+										})
+										.catch(function(err){
+											res.render('./admin/pages/music/music_list.html', {music_list : music_list});
+										});
+								})
+								.catch(function(err){
+									res.render('./admin/pages/music/music_list.html', {music_list : music_list});
+								});
+						}
 					});
-				
       		}
     	});
 	}
@@ -422,8 +462,8 @@ music_list_add = function(req, res){
 				knex.select()
 					.table('music_list')
 					.where({
-						music_title: req.body.music_title,
-						music_singer: req.body.music_singer
+						music_title : req.body.music_title,
+						music_singer : req.body.music_singer
 					})
 					.then(function(rows){
 						if (rows.length === 0){
@@ -434,6 +474,7 @@ music_list_add = function(req, res){
 									music_singer : req.body.music_singer,
 									album_image_filename : req.file !== undefined ? req.file.filename : "",
 									album_image_originalname : req.file !== undefined ? req.file.originalname : "No Image",
+									album_image_path : req.file !== undefined ? req.file.path : "",
 									tanggal_waktu : new Date(Date.now()),
 									user : decoded.username
 								})
@@ -469,10 +510,81 @@ music_list_add = function(req, res){
 	else{
 		res.redirect('/hidden');
 	}
-	// console.log(req.file);
-	// console.log(req.body.music_category);
-	// console.log(req.body.music_title);
-	// console.log(req.body.music_singer);
+};
+
+music_list_delete = function(req, res){
+	var token = req.cookies.tid;
+
+	if (token !== undefined){
+		jwt.verify(token, config.secret, function(err, decoded) {      
+      		if (err){
+      			res.clearCookie('tid')
+        		   .redirect('/hidden');
+			}
+			else{
+				knex.select()
+					.table('music_list')
+					.where({
+						music_category : req.body.music_category,
+						music_title : req.body.music_title,
+						music_singer : req.body.music_singer
+					})
+					.then(function(rows){
+						if (rows.length === 0){
+							res.json({
+								success : false,
+								message : 'Music dengan kategori ' + req.body.music_category + ', judul ' + req.body.music_title + ', dan penyanyi ' + req.body.music_singer + ' tidak terdaftar. Jika pada tabel dibawah tercantum silahkan melakukan refresh page.'
+							});
+						}
+						else{
+							knex('music_list')
+								.where({
+									music_category : req.body.music_category,
+									music_title : req.body.music_title,
+									music_singer : req.body.music_singer
+								})
+								.del()
+								.then(function(success){
+									if (success === 1){
+										const fs = require('fs');
+
+										fs.unlink(rows[0].album_image_path, (err) => {
+											if (err) throw err;
+											// console.log('successfully deleted ' + rows[0].album_image_path);
+										});
+
+										res.json({
+											success : true,
+											message : 'Data telah berhasil dihapus !'
+										});
+									}
+									else{
+										res.json({
+											success : false,
+											message : 'Maaf, terjadi kesalahan pada saat penghapusan data.'
+										})
+									}
+								})
+								.catch(function(err){
+									res.json({
+										success : false,
+										message : 'Maaf, terjadi kesalahan pada saat penghapusan data.'
+									});
+								});
+						}
+					})
+					.catch(function(err){
+						res.json({
+							success : false,
+							message : 'Maaf, terjadi kesalahan pada saat penghapusan data.'
+						});
+					});
+      		}
+    	});
+	}
+	else{
+		res.redirect('/hidden');
+	}
 };
 
 handler = {
@@ -485,7 +597,8 @@ handler = {
 	logout : logout,
 	music_category_add : music_category_add,
 	music_category_delete : music_category_delete,
-	music_list_add : music_list_add
+	music_list_add : music_list_add,
+	music_list_delete : music_list_delete
 };
 
 module.exports = handler;

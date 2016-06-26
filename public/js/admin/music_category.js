@@ -39,7 +39,7 @@ var func_add_music_category = function(){
 						$( '<div id="div-row-alert-form-category" class="row">' +
 				               '<div class="col-lg-12">' +
 				                   '<div id="div-row-alert-messsage-form-category" class="alert alert-danger">' +
-				                       'Category masih kosong !' +
+				                       res.message +
 				                   '</div>' +
 				               '</div>' +
 				           '</div>' ).insertBefore( '#div-row-form-music-category' );
@@ -92,7 +92,7 @@ var func_add_music_category = function(){
 						$( '<div id="div-row-alert-form-category" class="row">' +
 				               '<div class="col-lg-12">' +
 				                   '<div id="div-row-alert-messsage-form-category" class="alert alert-danger">' +
-				                       'Category masih kosong !' +
+				                       res.message +
 				                   '</div>' +
 				               '</div>' +
 				           '</div>' ).insertBefore( '#div-row-form-music-category' );
