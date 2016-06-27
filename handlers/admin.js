@@ -310,7 +310,7 @@ authentication = function(req, res){
 		.catch(function(err){
 			res.json({
 				success : false,
-				message : 'Something error occured'
+				message : 'Maaf, terdapat suatu kesalahan'
 			});
 		});
 };
@@ -408,23 +408,44 @@ music_category_delete = function(req, res){
 							});
 						}
 						else{
-							knex('music_category')
+							knex.select()
+								.table('music_list')
 								.where({
-									category : req.body.music_category
+									music_category : req.body.music_category
 								})
-								.del()
-								.then(function(success){
-									if (success === 1){
-										res.json({
-											success : true,
-											message : 'Data telah berhasil dihapus !'
-										});
+								.then(function(rows){
+									if (rows.length === 0){
+										knex('music_category')
+											.where({
+												category : req.body.music_category
+											})
+											.del()
+											.then(function(success){
+												if (success === 1){
+													res.json({
+														success : true,
+														message : 'Data telah berhasil dihapus !'
+													});
+												}
+												else{
+													res.json({
+														success : false,
+														message : 'Maaf, terjadi kesalahan pada saat penghapusan data.'
+													})
+												}
+											})
+											.catch(function(err){
+												res.json({
+													success : false,
+													message : 'Maaf, terjadi kesalahan pada saat penghapusan data.'
+												});
+											});
 									}
 									else{
 										res.json({
 											success : false,
-											message : 'Maaf, terjadi kesalahan pada saat penghapusan data.'
-										})
+											message : 'Category ' + req.body.music_category + ' sudah memiliki music list.'
+										});
 									}
 								})
 								.catch(function(err){
@@ -472,13 +493,13 @@ music_list_add = function(req, res){
 									music_category : req.body.music_category,
 									music_title : req.body.music_title,
 									music_singer : req.body.music_singer,
-									album_image_filename : req.file !== undefined ? req.file.filename : "",
-									album_image_originalname : req.file !== undefined ? req.file.originalname : "No Image",
-									album_image_path : req.file !== undefined ? req.file.path : "",
+									album_image_filename : "",
+									album_image_originalname : "No Image",
+									album_image_path : "",
 									tanggal_waktu : new Date(Date.now()),
 									user : decoded.username
 								})
-								.then(function(music_category){
+								.then(function(music_list){
 									res.json({
 										success : true,
 										message : 'Data telah berhasil diinput !'
@@ -497,6 +518,46 @@ music_list_add = function(req, res){
 								message : 'Music dengan judul ' + req.body.music_title + '  dan penyanyi ' + req.body.music_singer + ' sudah terdaftar. Jika pada tabel dibawah tidak tercantum silahkan melakukan refresh page.'
 							})
 						}
+					})
+					.catch(function(err){
+						res.json({
+							success : false,
+							message : 'Maaf, terjadi kesalahan pada saat penginputan data.'
+						});
+					});
+      		}
+    	});
+	}
+	else{
+		res.redirect('/hidden');
+	}
+}
+
+music_list_upload = function(req, res){
+	var token = req.cookies.tid;
+
+	if (token !== undefined){
+		jwt.verify(token, config.secret, function(err, decoded) {      
+      		if (err){
+      			res.clearCookie('tid')
+        		   .redirect('/hidden');
+			}
+			else{
+				knex('music_list')
+					.where({
+						music_title : req.body.music_title,
+						music_singer : req.body.music_singer,
+					})
+					.update({
+						album_image_filename : req.file !== undefined ? req.file.filename : "",
+						album_image_originalname : req.file !== undefined ? req.file.originalname : "No Image",
+						album_image_path : req.file !== undefined ? req.file.path : ""
+					})
+					.then(function(music_list){
+						res.json({
+							success : true,
+							message : 'Data telah berhasil diupload !'
+						});
 					})
 					.catch(function(err){
 						res.json({
@@ -537,40 +598,118 @@ music_list_delete = function(req, res){
 							});
 						}
 						else{
-							knex('music_list')
-								.where({
-									music_category : req.body.music_category,
-									music_title : req.body.music_title,
-									music_singer : req.body.music_singer
-								})
-								.del()
-								.then(function(success){
-									if (success === 1){
-										const fs = require('fs');
+							if (rows[0].album_image_originalname !== 'No Image'){
+								const fs = require('fs');
 
-										fs.unlink(rows[0].album_image_path, (err) => {
-											if (err) throw err;
-											// console.log('successfully deleted ' + rows[0].album_image_path);
+								fs.stat(rows[0].album_image_path, function(err) {
+									/* jika file ditemukan */
+								    if (err === null){
+								        fs.unlink(rows[0].album_image_path, function(err){
+											if (err){
+												res.json({
+													success : false,
+													message : 'Maaf, terjadi kesalahan pada saat penghapusan data.'
+												});
+											}
+											else{
+												knex('music_list')
+													.where({
+														music_category : req.body.music_category,
+														music_title : req.body.music_title,
+														music_singer : req.body.music_singer
+													})
+													.del()
+													.then(function(success){
+														if (success === 1){
+															res.json({
+																success : true,
+																message : 'Data telah berhasil dihapus !'
+															});
+														}
+														else{
+															res.json({
+																success : false,
+																message : 'Maaf, terjadi kesalahan pada saat penghapusan data.'
+															});
+														}
+													})
+													.catch(function(err){
+														res.json({
+															success : false,
+															message : 'Maaf, terjadi kesalahan pada saat penghapusan data.'
+														});
+													});
+											}
 										});
-
-										res.json({
-											success : true,
-											message : 'Data telah berhasil dihapus !'
+								   	}
+								   	/* jika file tidak ditemukan */
+								   	else if (err.code == 'ENOENT'){
+								   		knex('music_list')
+											.where({
+												music_category : req.body.music_category,
+												music_title : req.body.music_title,
+												music_singer : req.body.music_singer
+											})
+											.del()
+											.then(function(success){
+												if (success === 1){
+													res.json({
+														success : true,
+														message : 'Data telah berhasil dihapus !'
+													});
+												}
+												else{
+													res.json({
+														success : false,
+														message : 'Maaf, terjadi kesalahan pada saat penghapusan data.'
+													});
+												}
+											})
+											.catch(function(err){
+												res.json({
+													success : false,
+													message : 'Maaf, terjadi kesalahan pada saat penghapusan data.'
+												});
+											});
+								   	}
+								   	/* error lain */
+								   	else{
+								   		res.json({
+											success : false,
+											message : 'Maaf, terjadi kesalahan pada saat penghapusan data.'
 										});
-									}
-									else{
+								   	}
+								});
+							}
+							else{
+								knex('music_list')
+									.where({
+										music_category : req.body.music_category,
+										music_title : req.body.music_title,
+										music_singer : req.body.music_singer
+									})
+									.del()
+									.then(function(success){
+										if (success === 1){
+											res.json({
+												success : true,
+												message : 'Data telah berhasil dihapus !'
+											});
+										}
+										else{
+											res.json({
+												success : false,
+												message : 'Maaf, terjadi kesalahan pada saat penghapusan data.'
+											});
+										}
+									})
+									.catch(function(err){
 										res.json({
 											success : false,
 											message : 'Maaf, terjadi kesalahan pada saat penghapusan data.'
-										})
-									}
-								})
-								.catch(function(err){
-									res.json({
-										success : false,
-										message : 'Maaf, terjadi kesalahan pada saat penghapusan data.'
+										});
 									});
-								});
+							}
 						}
 					})
 					.catch(function(err){
@@ -598,6 +737,7 @@ handler = {
 	music_category_add : music_category_add,
 	music_category_delete : music_category_delete,
 	music_list_add : music_list_add,
+	music_list_upload : music_list_upload,
 	music_list_delete : music_list_delete
 };
 

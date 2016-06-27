@@ -13,8 +13,9 @@ router = function(app, express, upload){
 	r.post('/hidden/logout', h.admin.logout);
 	r.post('/hidden/music/category/add', h.admin.music_category_add);
 	r.post('/hidden/music/category/delete', h.admin.music_category_delete);
-	r.post('/hidden/music/list/add', upload.single('image'), h.admin.music_list_add);
-	r.post('/hidden/music/list/delete', upload.single('image'), h.admin.music_list_delete);
+	r.post('/hidden/music/list/add', h.admin.music_list_add);
+	r.post('/hidden/music/list/upload', upload.single('image'), h.admin.music_list_upload);
+	r.post('/hidden/music/list/delete', h.admin.music_list_delete);
 	app.use(r);	
 };
 
