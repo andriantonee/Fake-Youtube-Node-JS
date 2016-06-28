@@ -40,19 +40,38 @@
 }
 #jdlply{
 	float:left;
+    margin: 1%;
+
 }
 #btnlike{
 	float:right;
+    margin: 1%;
 }
 .contplay{
 	width:97%;
 	margin-left: 0.5%;
+	float: left;
 }
 .contplay1{
 	clear:both;
 	margin-left: 0.5%;
 }
-
+#btnlirik{
+	clear:both;
+	margin-left: 0.5%;
+}
+#btnlirik:after {
+    font-family: "Glyphicons Halflings";
+    content: "\e114";
+	float: right;
+    margin-left: 15px;
+}
+#btnlirik.collapsed:after {
+    content: "\e113";
+}
+#lirik{
+	margin-left: 0.5%;
+}
 #plylist{
 	margin:1%;
 }
