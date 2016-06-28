@@ -1,0 +1,56 @@
+{% macro tab_content_title(tab_content_music_category) %}
+	<div class="container text-left">
+        <h3>Music Category</h3>
+        <ul class="nav nav-tabs">
+            {% for data in tab_content_music_category %}
+				<li class="{{ data['class'] }}"><a data-toggle="tab" href="#{{ data['category'] }}">{{ data["category"] }}</a></li>
+			{% endfor %}
+        </ul>
+    </div>
+{% endmacro %}
+
+{% macro tab_content_body(tab_content_music_category) %}
+	<div class="tab-content">
+		{% for data in tab_content_music_category %}
+			<div id="{{ data['category'] }}" class="tab-pane fade in {{ data['class'] }}">
+				<div class="container">
+                    <div class="panel-heading">
+                        <h3>{{ data["category"] }} Music Video</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            {% for data_list in data["list"] %}
+                                <div class="col-sm-6 col-md-3">
+                                    <div class="caption">
+                                        <h3>{{ data_list["music_title"] }}</h3>
+                                    </div>
+                                    <div class="thumbnail">
+                                        <img src="/img/{{ data_list['album_image_filename'] if data_list['album_image_originalname'] != 'No Image' else 'No Image.jpg' }}" alt="Generic placeholder thumbnail">
+                                    </div>
+                                    <div class="caption">
+                                        <p>{{ data_list["music_singer"] }}</p>
+                                        <p>
+                                            <a href="#" class="btn btn-primary" role="button">Play</a> 
+                                        </p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+			</div>
+		{% endfor %}
+	</div>
+{% endmacro %}
+
+{% macro main(tab_content_music_category) %}
+	<div class="container-fluid text-center">
+        <div class="well">
+            <div class="panel">
+                {{ tab_content_title(tab_content_music_category) }}
+
+                {{ tab_content_body(tab_content_music_category) }}
+            </div>
+        </div>
+    </div>
+{% endmacro %}

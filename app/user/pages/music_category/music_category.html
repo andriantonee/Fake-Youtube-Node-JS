@@ -1,6 +1,6 @@
 {% extends "../index.html" %}
 {% import "../../widgets/navbar/navbar.html" as navbar %}
-{% import "../../widgets/tab_content_music_category/tab_content_music_category.html" as tab_content_music_category %}
+{% import "./utils/tab_content_music_category/tab_content_music_category.html" as tab_content_music_category %}
 
 {% block title %}Music Category{% endblock %}
 
@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block content %}
-    {{ navbar.main() }}
+    {{ navbar.main(music_category["active_navbar"]) }}
 
     {{ tab_content_music_category.main(music_category["tab_content_music_category"]) }}
 

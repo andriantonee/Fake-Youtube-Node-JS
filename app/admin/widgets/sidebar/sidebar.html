@@ -4,16 +4,16 @@
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
                 <li>
-                    <a href="" id="dashboard" class="{{ sidebar["dashboard"] }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                    <a href="/hidden/home" id="dashboard" class="{{ sidebar["dashboard"] }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                 </li>
                 <li {{ sidebar["music_li"] }}>
                     <a href="" {{ sidebar["music_li_a"] }}><i class="fa fa-music fa-fw"></i> Music<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level {{ sidebar["music_li_a_ul"] }}">
                         <li>
-                            <a href="" id="music_category" class="{{ sidebar["music_category"] }}">Music Category</a>
+                            <a href="/hidden/music/category" id="music_category" class="{{ sidebar["music_category"] }}">Music Category</a>
                         </li>
                         <li>
-                            <a href="" id="music_list" class="{{ sidebar["music_list"] }}">Music List</a>
+                            <a href="/hidden/music/list" id="music_list" class="{{ sidebar["music_list"] }}">Music List</a>
                         </li>
                     </ul>
                 </li>
