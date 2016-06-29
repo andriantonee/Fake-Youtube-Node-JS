@@ -1,44 +1,41 @@
 {% macro main(navbar) %}
-
-	<nav class="navbar navbar-inverse">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="/">Tester</a>
-			</div>
-				
-			<div class="collapse navbar-collapse" id="myNavbar">
-				<ul class="nav navbar-nav">
-					<li {{ navbar["home"] }}>
-						<a href="/">Home</a>
-					</li>
-					<li {{ navbar["music_category"] }}>
-						<a href="/music/category">Music Category</a>
-					</li>
-					<li>
-						<a href="#">Popular on Web</a>
-					</li>
-		            <li>
-		            	<a href="#">About Us</a>
-		            </li>
-		            <li>
-		            	<a href="#">Privacy & Policy</a>
-		            </li>
-				</ul>
-				<ul class="nav navbar-nav navbar-right">
-					<li>
-						<a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a>
-					</li>
-					<li>
-						<a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a>
-					</li>
-				</ul>
+	
+	<header> 
+		<div class="container">
+			<div class = "row">
+				<nav class="navbar navbar-default navbar-static-top">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a href="/" id="logo"><img src="/img-app/logo.png" style = "width : 40%;"/></a>
+					</div>
+						
+					<div class="collapse navbar-collapse" id="myNavbar">
+						<ul class="nav navbar-nav navbar-right">
+							<li {{ navbar["home"] }}>
+								<a href="/">Home</a>
+							</li>
+							<li {{ navbar["music_category"] }}>
+								<a href="/music/category">Music Category</a>
+							</li>
+							<li>
+								<a href="#">Popular on Web</a>
+							</li>
+				            <li>
+				            	<a href="#">About Us</a>
+				            </li>
+				            <li>
+				            	<a href="#">Privacy & Policy</a>
+				            </li>
+						</ul>
+					</div>
+				</nav>
 			</div>
 		</div>
-	</nav>
+	</header>
 	
 {% endmacro %}
