@@ -3,56 +3,309 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Webster</title>
+		<link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     	<link href="../../../public/css/user/style.css" rel="stylesheet">
+		<link href="../../../public/css/user/simple-sidebar.css" rel="stylesheet">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-		 
+		 <style>
+			 #section-suggestion{
+				 padding : 10px;
+				 margin-left : 4px;
+				 
+			 }
+			 #section-video{
+				 padding:5px;
+				 
+			 }
+			 .suggestion-item{
+				 margin-bottom : 10px;
+			 }
+		 </style>
+    
 	</head>
 	
 	<body>
-		<nav class="navbar navbar-inverse">
-			<div class="container-fluid">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="#">Tester</a>
-				</div>
-					
-				<div class="collapse navbar-collapse" id="myNavbar">
-				<ul class="nav navbar-nav">
-					
-					<li class="active"><a href="#">Home</a></li>
-					
-					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Music Category <span class="caret"></span></a>
-						<ul role="menu" class="dropdown-menu">
-							<li><a href="pop.html">Pop</a></li>
-							<li><a href="jazz.html">Jazz</a></li>
-							<li><a href="edm.html">EDM</a></li>
-							<li><a href="rock.html">Rock</a></li>
-						</ul>
-					</li>
-					<li><a href="popular.html">Popular on Web</a></li>
-                    <li><a href="about.html">About Us</a></li>
-                    <li><a href="priv.html">Privacy & Policy</a></li>
-					
-				</ul>
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-					<li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-				</ul>
+		<!--toggle-sidebar-->
+		<div id="wrapper" class = "toggled">
+			<div id="sidebar-wrapper" class ="text-center">
+				
+				<h1>title</h1>
+				<p>isi</p>
+			</div>
+    	</div>
+		<!--end-toggle-sidebar-->
+		<header> 
+			<div class="container">
+				<div class = "row">
+					<nav class="navbar">
+						<div class="collapse navbar-collapse" id="myNavbar">
+							<h1 id ="logo" style =""><a href="home.html"><img src="../../../img/logo.png" style = "width : 40%;"/></a></h1>
+							<ul class="nav navbar-nav navbar-right">
+								<li><a href="../home/home.html">Home</a></li>
+								<li><a href="../pages/category.html">Music Category</a></li>
+								<li><a href="../pages/popular.html">Popular on Web</a></li>
+								<li><a href="about.html">About Us</a></li>
+								<li><a href="priv.html">Privacy & Policy</a></li>
+							</ul>
+						</div>
+					</nav>
 				</div>
 			</div>
-		</nav>
+		</header>
+		
+		<div class="well">
+			<div class = "container">
+				<div class = "row">
+					<!--section-video-->
+					<div id = "section-video" class="col-md-8 panel">
+						<div class="embed-responsive embed-responsive-16by9">
+							<iframe id="plyer" class="embed-responsive-item" width="100%"
+								src="http://www.youtube.com/embed/X0gtzHJphVg?autoplay=1showinfo=0controls=0" frameborder="0" allowfullscreen>
+							</iframe>
+						</div>
+						<div class="container">
+							<div class="row">
+								<div class="col-md-12">
+									<h2 class="title">Judul ###################</h2>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<img src="../../../img/view.png" alt="" width="5%"><h4 class="title" style="display:inline; margin:4px;">###### view</h4>
+									<br>
+									<img src="../../../img/love.png" alt="" width="5%"><h4 class="title"style="display:inline; margin:4px;">###### love</h4>
+									<br><br>
+									<a href="#menu-toggle" class="btn btn-success" id="menu-toggle">Show Lyric</a>
+								</div>
+								<div class="col-md-6">
+									<a href="#"><img src="../../../img/love.png" alt="" width="20%"></a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--end-section-video-->
+					<!--section-suggestion-->
+					<div id = "section-suggestion" class="col-md-3 panel">
+						<!--row-1-->
+							<div class="row suggestion-item">
+								<a href="">
+									<div class="col-md-5">
+										<span class="video">
+											<img src="http://placehold.it/120x80" class="image-responsive" >
+										</span>
+									</div>
+									<div class="col-md-7">
+										<span>
+											<span>
+												Judul ################
+												<!--18 maks huruf-->
+											</span>
+											<span>
+												<h6>
+													<small>#### Love </small>
+													<br>
+													<small>#### view </small>
+												</h6>
+											</span>
+										</span>
+									</div>
+								</a>
+							</div>
+						<!--end-row-1-->
+						<!--row-2-->
+							<div class="row suggestion-item">
+								<a href="">
+									<div class="col-md-5">
+										<span class="video">
+											<img src="http://placehold.it/120x80" class="image-responsive" >
+										</span>
+									</div>
+									<div class="col-md-7">
+										<span>
+											<span>
+												Judul ################
+												<!--18 maks huruf-->
+											</span>
+											<span>
+												<h6>
+													<small>#### Love </small>
+													<br>
+													<small>#### view </small>
+												</h6>
+											</span>
+										</span>
+									</div>
+								</a>
+							</div>
+						<!--end-row-2-->
+						<!--row-3-->
+							<div class="row suggestion-item">
+								<a href="">
+									<div class="col-md-5">
+										<span class="video">
+											<img src="http://placehold.it/120x80" class="image-responsive" >
+										</span>
+									</div>
+									<div class="col-md-7">
+										<span>
+											<span>
+												Judul ################
+												<!--18 maks huruf-->
+											</span>
+											<span>
+												<h6>
+													<small>#### Love </small>
+													<br>
+													<small>#### view </small>
+												</h6>
+											</span>
+										</span>
+									</div>
+								</a>
+							</div>
+						<!--end-row-3-->
+						<!--row-4-->
+							<div class="row suggestion-item">
+								<a href="">
+									<div class="col-md-5">
+										<span class="video">
+											<img src="http://placehold.it/120x80" class="image-responsive" >
+										</span>
+									</div>
+									<div class="col-md-7">
+										<span>
+											<span>
+												Judul ################
+												<!--18 maks huruf-->
+											</span>
+											<span>
+												<h6>
+													<small>#### Love </small>
+													<br>
+													<small>#### view </small>
+												</h6>
+											</span>
+										</span>
+									</div>
+								</a>
+							</div>
+						<!--end-row-4-->
+						<!--row-5-->
+							<div class="row suggestion-item">
+								<a href="">
+									<div class="col-md-5">
+										<span class="video">
+											<img src="http://placehold.it/120x80" class="image-responsive" >
+										</span>
+									</div>
+									<div class="col-md-7">
+										<span>
+											<span>
+												Judul ################
+												<!--18 maks huruf-->
+											</span>
+											<span>
+												<h6>
+													<small>#### Love </small>
+													<br>
+													<small>#### view </small>
+												</h6>
+											</span>
+										</span>
+									</div>
+								</a>
+							</div>
+						<!--end-row-5-->
+						<!--row-6-->
+							<div class="row suggestion-item">
+								<a href="">
+									<div class="col-md-5">
+										<span class="video">
+											<img src="http://placehold.it/120x80" class="image-responsive" >
+										</span>
+									</div>
+									<div class="col-md-7">
+										<span>
+											<span>
+												Judul ################
+												<!--18 maks huruf-->
+											</span>
+											<span>
+												<h6>
+													<small>#### Love </small>
+													<br>
+													<small>#### view </small>
+												</h6>
+											</span>
+										</span>
+									</div>
+								</a>
+							</div>
+						<!--end-row-6-->
+						<!--row-7-->
+							<div class="row suggestion-item">
+								<a href="">
+									<div class="col-md-5">
+										<span class="video">
+											<img src="http://placehold.it/120x80" class="image-responsive" >
+										</span>
+									</div>
+									<div class="col-md-7">
+										<span>
+											<span>
+												Judul ################
+												<!--18 maks huruf-->
+											</span>
+											<span>
+												<h6>
+													<small>#### Love </small>
+													<br>
+													<small>#### view </small>
+												</h6>
+											</span>
+										</span>
+									</div>
+								</a>
+							</div>
+						<!--end-row-7-->
+						<!--row-8-->
+							<div class="row suggestion-item">
+								<a href="">
+									<div class="col-md-5">
+										<span class="video">
+											<img src="http://placehold.it/120x80" class="image-responsive" >
+										</span>
+									</div>
+									<div class="col-md-7">
+										<span>
+											<span>
+												Judul ################
+												<!--18 maks huruf-->
+											</span>
+											<span>
+												<h6>
+													<small>#### Love </small>
+													<br>
+													<small>#### view </small>
+												</h6>
+											</span>
+										</span>
+									</div>
+								</a>
+							</div>
+						<!--end-row-8-->
+					</div>
+					
+					<!--end-section-suggestion-->
+				</div>
+			</div>
+		</div>
+		
 
-		<div class="tmpplay">
-			<iframe id="plyer" width="97%" height="450"
-				src="autoplay=1"frameborder="0"allowfullscreen>
-			</iframe>
+		<!--<div class="tmpplay">
+			
 			<div class="contplay">
 				<h3 id="jdlply"> Title </h3>
 				<div id="btnlike">
@@ -98,10 +351,18 @@
 				</div>
 				</div>
 			</div>
-		</div>
+		</div>-->
 		
-		<div class="container-fluid text-center">
-			CopyRight &copy;
-        </div>	
+		<footer>
+			<div class="text-center">
+				CopyRight &copy; Team Revolution
+			</div>	
+		</footer>
+		<script>
+			$("#menu-toggle").click(function(e) {
+				e.preventDefault();
+				$("#wrapper").toggleClass("toggled");
+			});
+		</script>
 	</body>
 </html>
