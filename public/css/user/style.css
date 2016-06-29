@@ -95,3 +95,14 @@ hr{
 	padding : 0px; 
 	margin : 0px
 }
+.panel{
+	background: #e0e0e0
+}
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover{
+	background: #e0e0e0;
+	border-color: transparent transparent;
+
+}
+li.active{
+	background: #e0e0e0
+}
