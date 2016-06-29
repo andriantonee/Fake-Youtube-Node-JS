@@ -19,6 +19,10 @@ middleware = function(app, globdir, express){
 		extended: false
 	}));
 	app.use(cookieParser());
+	app.use(function(req, res, next) {
+		res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+	    next();
+	});
 
 	router.admin(app, express, upload);
 	router.user(app, express);

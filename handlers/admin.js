@@ -320,10 +320,16 @@ logout = function(req, res){
 
 	if (token !== undefined){
 		res.clearCookie('tid')
-	       .redirect('/hidden');
+	       .json({
+	       		success : true,
+	       		message : 'User telah berhasil logout'
+	       })
 	}
 	else{
-		res.redirect('/hidden');
+		res.json({
+			success : true,
+			message : 'User telah berhasil logout'
+		});
 	}
 };
 
