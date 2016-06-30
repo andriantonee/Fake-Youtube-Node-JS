@@ -1,5 +1,6 @@
 {% extends "../index.html" %}
 {% import "../../widgets/navbar/navbar.html" as navbar %}
+{% import "../../widgets/copyright/copyright.html" as copyright %}
 
 {% block title %}Home{% endblock %}
 
@@ -190,9 +191,7 @@
         </div>
     </div>
     
-    <div class="container-fluid text-center">
-        CopyRight &copy;2016 Vevo
-    </div>
+    {{ copyright.main() }}
 {% endblock %}
 
 {% block JS %}
