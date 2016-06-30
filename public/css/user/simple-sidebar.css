@@ -19,7 +19,7 @@
 }
 
 #sidebar-wrapper {
-    z-index: 1000;
+    z-index: 2000;
     position: fixed;
     right: 0px;
     width: 0;

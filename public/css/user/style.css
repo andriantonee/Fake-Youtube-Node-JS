@@ -106,8 +106,16 @@ hr{
 li.active{
 	background: #e0e0e0
 }
-
-
+#section-suggestion{
+	padding : 10px;		 
+}
+#section-video{
+	padding:5px;
+	background-color : #e0e0e0
+}
+.suggestion-item{
+	margin-bottom : 10px;
+}
 
 /* Andrianto / Atok */
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>li>a{
@@ -117,8 +125,4 @@ li.active{
 .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>li>a:hover{
 	color: #23527c;
 	background-color: #eee;
-}
-.video img{
-	width: 150px;
-	height: 80px;
 }

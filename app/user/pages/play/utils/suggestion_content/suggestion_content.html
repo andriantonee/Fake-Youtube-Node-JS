@@ -1,0 +1,33 @@
+{% macro suggestion_content_body(suggestion_content_body) %}
+    {% for data in suggestion_content_body %}
+        <div class="row suggestion-item">
+            <a href="">
+                <span class="col-md-5">
+                    <img src="/img/{{ data['album_image_filename'] if data['album_image_originalname'] != 'No Image' else 'No Image.jpg' }}" alt="Generic placeholder thumbnail" class="img-responsive" >
+                </span>
+                <div class="col-md-7">
+                    <div class="row">
+                        <span>
+                            <span>
+                                {{ data["music_title"] }} - {{ data["music_singer"] }}
+                            </span>
+                            <span>
+                                <h6>
+                                    <small>#### Love </small>
+                                    <br>
+                                    <small>#### view </small>
+                                </h6>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+{% endmacro %}
+
+{% macro main(suggestion_content) %}
+    <div id="section-suggestion" class="col-md-4">
+        {{ suggestion_content_body(suggestion_content) }}
+    </div>
+{% endmacro %}

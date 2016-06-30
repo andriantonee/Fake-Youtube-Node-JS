@@ -4,14 +4,16 @@
             {% for data in body_content_popular_on_web %}
                 {% if loop.index0 % 3 == 0 %}<div class="row">{% endif %}
                     <div class="col-sm-4">
-                        <div class="video">
-                            <img src="/img/{{ data['album_image_filename'] if data['album_image_originalname'] != 'No Image' else 'No Image.jpg' }}" alt="Generic placeholder thumbnail">
-                        </div>
-                        <div class="deskripsi">
-                            <p>{{ data["music_title"] }}</p>
-                            <p>
-                                <a href="#" class="btn btn-primary" role="button">Play</a> 
-                            </p>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <img src="/img/{{ data['album_image_filename'] if data['album_image_originalname'] != 'No Image' else 'No Image.jpg' }}" alt="Generic placeholder thumbnail" class="img-responsive">
+                            </div>
+                            <div class="col-sm-8">
+                                <p>{{ data["music_title"] }}</p>
+                                <p>
+                                    <a href="#" class="btn btn-primary" role="button">Play</a> 
+                                </p>
+                            </div>
                         </div>
                     </div>
                 {% if loop.index0 % 3 == 2 or loop.last == true %}</div>{% endif %}
@@ -26,7 +28,7 @@
             <div class="row">
                 <h2 class="title">Top 12 Video Popular on Web</h2><hr/>
             </div>
-
+            
             {{ body_content_item(body_content_popular_on_web) }}
         </div>
     </div>

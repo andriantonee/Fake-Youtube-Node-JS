@@ -20,7 +20,8 @@ var active_sidebar = function(){
 		}
 	}),
 	jwt = require('jsonwebtoken'),
-	config = require('../config/admin');
+	config = require('../config/admin'),
+	async = require('async');
 
 login = function(req, res){
 	var token = req.cookies.tid;
@@ -49,7 +50,9 @@ home = function(req, res){
 					"username" : "undefined"
 				},
 				active_sidebar : active_sidebar()
-			}
+			},
+			total_view : 0,
+			total_like : 0
 		},
 		token = req.cookies.tid;
 
@@ -64,7 +67,26 @@ home = function(req, res){
 			}
 			else{
 				home.header.header_notification["username"] = decoded.username;
-				res.render('./admin/pages/home/home.html', {home : home});
+
+				knex('music_list_view')
+					.count('tanggal_waktu as total')
+					.then(function(rows){
+						home.total_view = rows[0].total
+
+						knex('music_list_like')
+							.count('tanggal_waktu as total')
+							.then(function(rows){
+								home.total_like = rows[0].total
+
+								res.render('./admin/pages/home/home.html', {home : home});
+							})
+							.catch(function(err){
+								res.render('./admin/pages/home/home.html', {home : home});
+							});
+					})
+					.catch(function(err){
+						res.render('./admin/pages/home/home.html', {home : home});
+					});
       		}
     	});
 	}
@@ -222,7 +244,7 @@ music_list_category = function(req, res){
 										}
 									};
 
-									knex.select('music_title','music_singer','album_image_filename','album_image_originalname')
+									knex.select('music_title','music_singer', 'youtube_video_id','album_image_filename','album_image_originalname')
 										.table('music_list')
 										.where({
 											music_category : req.params["category"]
@@ -499,6 +521,7 @@ music_list_add = function(req, res){
 									music_category : req.body.music_category,
 									music_title : req.body.music_title,
 									music_singer : req.body.music_singer,
+									youtube_video_id : req.body.youtube_video_id,
 									album_image_filename : "",
 									album_image_originalname : "No Image",
 									album_image_path : "",
@@ -537,7 +560,7 @@ music_list_add = function(req, res){
 	else{
 		res.redirect('/hidden');
 	}
-}
+};
 
 music_list_upload = function(req, res){
 	var token = req.cookies.tid;
@@ -732,6 +755,168 @@ music_list_delete = function(req, res){
 	}
 };
 
+view = function(req, res){
+	var token = req.cookies.tid;
+
+	if (token !== undefined){
+		jwt.verify(token, config.secret, function(err, decoded) {      
+      		if (err){
+      			res.clearCookie('tid')
+        		   .redirect('/hidden');
+			}
+			else{
+				knex.distinct('music_title','music_singer')
+					.select()
+					.table('music_list_view')
+					.then(function(rows){
+						var asyncTasks = [];
+
+						rows.forEach(function(item){
+							asyncTasks.push(function(callback){
+								knex('music_list_view')
+									.where({
+										music_title : item.music_title,
+										music_singer : item.music_singer
+									})
+									.del()
+									.then(function(rows){
+										var value = rows;
+
+										knex.select('view')
+											.table('music_list')
+											.where({
+												music_title : item.music_title,
+												music_singer : item.music_singer
+											})
+											.then(function(rows){
+												value += rows[0].view;
+
+												knex('music_list')
+													.where({
+														music_title : item.music_title,
+														music_singer : item.music_singer
+													})
+													.update({
+														view : value
+													})
+													.then(function(music_list){
+														callback();
+													})
+													.catch(function(err){
+														callback();
+													});
+											})
+											.catch(function(err){
+												callback();
+											});
+									})
+									.catch(function(err){
+										callback();
+									});
+							});
+						});
+						async.parallel(asyncTasks, function(){
+						  	res.json({
+						  		success : true,
+						  		message : "Data telah berhasil dipindahkan"
+						  	})
+						});
+					})
+					.catch(function(err){
+						res.json({
+					  		success : false,
+					  		message : "Data tidak berhasil dipindahkan"
+					  	})
+					});
+      		}
+    	});
+	}
+	else{
+		res.redirect('/hidden');
+	}
+};
+
+like = function(req, res){
+	var token = req.cookies.tid;
+
+	if (token !== undefined){
+		jwt.verify(token, config.secret, function(err, decoded) {      
+      		if (err){
+      			res.clearCookie('tid')
+        		   .redirect('/hidden');
+			}
+			else{
+				knex.distinct('music_title','music_singer')
+					.select()
+					.table('music_list_like')
+					.then(function(rows){
+						var asyncTasks = [];
+
+						rows.forEach(function(item){
+							asyncTasks.push(function(callback){
+								knex('music_list_like')
+									.where({
+										music_title : item.music_title,
+										music_singer : item.music_singer
+									})
+									.del()
+									.then(function(rows){
+										var value = rows;
+
+										knex.select('like')
+											.table('music_list')
+											.where({
+												music_title : item.music_title,
+												music_singer : item.music_singer
+											})
+											.then(function(rows){
+												value += rows[0].like;
+
+												knex('music_list')
+													.where({
+														music_title : item.music_title,
+														music_singer : item.music_singer
+													})
+													.update({
+														like : value
+													})
+													.then(function(music_list){
+														callback();
+													})
+													.catch(function(err){
+														callback();
+													});
+											})
+											.catch(function(err){
+												callback();
+											});
+									})
+									.catch(function(err){
+										callback();
+									});
+							});
+						});
+						async.parallel(asyncTasks, function(){
+						  	res.json({
+						  		success : true,
+						  		message : "Data telah berhasil dipindahkan"
+						  	})
+						});
+					})
+					.catch(function(err){
+						res.json({
+					  		success : false,
+					  		message : "Data tidak berhasil dipindahkan"
+					  	})
+					});
+			}
+		});
+	}
+	else{
+		res.redirect('/hidden');
+	}
+};
+
 handler = {
 	login : login,
 	home : home,
@@ -744,7 +929,9 @@ handler = {
 	music_category_delete : music_category_delete,
 	music_list_add : music_list_add,
 	music_list_upload : music_list_upload,
-	music_list_delete : music_list_delete
+	music_list_delete : music_list_delete,
+	view : view,
+	like : like
 };
 
 module.exports = handler;

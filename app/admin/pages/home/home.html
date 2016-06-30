@@ -33,6 +33,69 @@
 {% block content %}
     <div id="wrapper">
         {{ header.main(home["header"]) }}
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Home</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="alert alert-info">
+                        Fungsi Add dibawah hanya untuk menambahkan List View dan Like sekarang ke column View dan Like pada tabel Music List
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-eye fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">{{ home["total_view"] }}</div>
+                                    <div>Last View</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#listview" id="listview">
+                            <div class="panel-footer">
+                                <span class="pull-left">Add to Music List View</span>
+                                <span class="pull-right"><i class="fa fa-plus-circle"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-red">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-heart fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">{{ home["total_like"] }}</div>
+                                    <div>Last Like</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#listlike" id="listlike">
+                            <div class="panel-footer">
+                                <span class="pull-left">Add to Music List Like</span>
+                                <span class="pull-right"><i class="fa fa-plus-circle"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
