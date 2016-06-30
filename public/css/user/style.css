@@ -118,3 +118,7 @@ li.active{
 	color: #23527c;
 	background-color: #eee;
 }
+.video img{
+	width: 150px;
+	height: 80px;
+}

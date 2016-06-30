@@ -62,7 +62,7 @@ var func_add_music_list = function(){
         }
         
         if (data.album_image !== undefined){
-          if (data.album_image.type !== 'image/jpg' && data.album_image.type !== 'image/jpeg') {
+          if (data.album_image.type !== 'image/jpg' && data.album_image.type !== 'image/jpeg'){
             $( 'input[name=input_image_album]' ).focus();
 
             if ($( '#div-row-alert-form-list' ).length === 0){
@@ -82,6 +82,8 @@ var func_add_music_list = function(){
           }
         }
         
+        return false;
+
         var formdata = new FormData();
         formdata.append('music_category', data.music_category);
         formdata.append('music_title', data.music_title);
@@ -218,7 +220,7 @@ var func_add_music_list = function(){
 
             return false;
         }
-        console.log("jalan");
+        
         $.ajax({
             method : 'POST',
             async : false,

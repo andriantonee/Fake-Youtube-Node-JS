@@ -40,15 +40,14 @@
 
 {% macro main(tab_content_music_category) %}
     <div class="well">
-            <div class="container text-center">
-                <div class="row text-left">
-                    <h3 class ="title">Music Category</h3><hr/>
-                </div>
-
-                {{ tab_content_title(tab_content_music_category) }}
-
-                {{ tab_content_body(tab_content_music_category) }}
+        <div class="container text-center">
+            <div class="row text-left">
+                <h2 class="title">Music Category</h2><hr/>
             </div>
+
+            {{ tab_content_title(tab_content_music_category) }}
+
+            {{ tab_content_body(tab_content_music_category) }}
         </div>
     </div>
 {% endmacro %}

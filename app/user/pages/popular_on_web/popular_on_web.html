@@ -1,9 +1,9 @@
 {% extends "../index.html" %}
 {% import "../../widgets/navbar/navbar.html" as navbar %}
 {% import "../../widgets/copyright/copyright.html" as copyright %}
-{% import "./utils/tab_content_music_category/tab_content_music_category.html" as tab_content_music_category %}
+{% import "./utils/body_content_popular_on_web/body_content_popular_on_web.html" as body_content_popular_on_web %}
 
-{% block title %}Music Category{% endblock %}
+{% block title %}About Us{% endblock %}
 
 {% block CSS %}
     <!-- Font Lobster -->
@@ -17,9 +17,9 @@
 {% endblock %}
 
 {% block content %}
-    {{ navbar.main(music_category["active_navbar"]) }}
+    {{ navbar.main(popular_on_web["active_navbar"]) }}
 
-    {{ tab_content_music_category.main(music_category["tab_content_music_category"]) }}
+    {{ body_content_popular_on_web.main(popular_on_web["body_content_popular_on_web"]) }}
 
     {{ copyright.main() }}
 {% endblock %}

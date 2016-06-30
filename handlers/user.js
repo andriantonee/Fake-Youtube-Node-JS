@@ -1,7 +1,9 @@
 var active_navbar = function(){
 		var obj = {
 			"home" : "",
-			"music_category" : ""
+			"music_category" : "",
+			"popular_on_web" : "",
+			"about_us" : ""
 		};
 
 		return obj;
@@ -78,9 +80,44 @@ music_category = function(req, res){
 		});
 };
 
+popular_on_web = function(req, res){
+	var popular_on_web = {
+		active_navbar : active_navbar(),
+		body_content_popular_on_web : []
+	};
+
+	popular_on_web.active_navbar.popular_on_web = "class=active";
+
+	knex.select()
+		.table('music_list')
+		.orderBy('tanggal_waktu')
+		.limit(12)
+		.then(function(rows){
+			popular_on_web.body_content_popular_on_web = rows;
+			
+			res.render('./user/pages/popular_on_web/popular_on_web.html', {popular_on_web : popular_on_web});
+		})
+		.catch(function(err){
+			console.log(err);
+			res.render('./user/pages/popular_on_web/popular_on_web.html', {popular_on_web : popular_on_web});
+		});
+}
+
+about_us = function(req, res){
+	var about_us = {
+		active_navbar : active_navbar()
+	};
+
+	about_us.active_navbar.about_us = "class=active";
+
+	res.render('./user/pages/about_us/about_us.html', {about_us : about_us});
+};
+
 handler = {
-	home: home,
-	music_category : music_category
+	home : home,
+	music_category : music_category,
+	popular_on_web : popular_on_web,
+	about_us : about_us
 };
 
 module.exports = handler;

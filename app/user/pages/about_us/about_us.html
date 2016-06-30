@@ -1,9 +1,8 @@
 {% extends "../index.html" %}
 {% import "../../widgets/navbar/navbar.html" as navbar %}
 {% import "../../widgets/copyright/copyright.html" as copyright %}
-{% import "./utils/tab_content_music_category/tab_content_music_category.html" as tab_content_music_category %}
 
-{% block title %}Music Category{% endblock %}
+{% block title %}About Us{% endblock %}
 
 {% block CSS %}
     <!-- Font Lobster -->
@@ -17,10 +16,26 @@
 {% endblock %}
 
 {% block content %}
-    {{ navbar.main(music_category["active_navbar"]) }}
+    {{ navbar.main(about_us["active_navbar"]) }}
 
-    {{ tab_content_music_category.main(music_category["tab_content_music_category"]) }}
+    <div class="well">
+        <div class="container text-center">
+            <div class="row text-left">
+                <h2 class="title">About Us</h2><hr/>
+            </div>
 
+            <div class="row panel">
+                <h2>Project ini dibentuk oleh Team Revolution</h2>
+                <h2>Team Revolution beranggotakan : </h2>
+                <h3>Andrianto ( 13.111.0721)</h3>
+                <h3>Suwandi ( 13.111.1173 )</h3>
+                <h3>Alvin Yaputra ( 13.111.1033 )</h3>
+                <h3>Alber Wijaya( 13.111.0747 )</h3>
+                <h3>David Tjin ( 13.111.0755)</h3>
+            </div>
+        </div>
+    </div>
+    
     {{ copyright.main() }}
 {% endblock %}
 

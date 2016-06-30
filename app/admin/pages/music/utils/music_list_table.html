@@ -16,7 +16,9 @@
                                 <h4 class="modal-title" id="myModalLabel">#{{ number }} - {{ data["music_title"] }} - {{ data["music_singer"] }} - {{ data["album_image_originalname"] }}</h4>
                             </div>
                             <div class="modal-body">
-                                <img class="div-img-center" src="/img/{{data['album_image_filename']}}" width="450px" height="400px">
+                                <div class="thumbnail">
+                                    <img class="div-img-center" src="/img/{{data['album_image_filename']}}">
+                                </div>
                             </div>
                         </div>
                     </div>
