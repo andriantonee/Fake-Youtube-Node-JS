@@ -3,6 +3,7 @@ var func_add_music_list = function(){
             music_category : $( '#musiccategory' ).val() || "",
             music_title : $( 'input[name=input_music_title]' ).val() || "",
             music_singer : $( 'input[name=input_music_singer]' ).val() || "",
+            youtube_video_id : $( 'input[name=input_youtube_video_id]' ).val() || "",
             album_image : $( 'input[name=input_image_album]' )[0].files[0] || undefined
         };
 
@@ -60,7 +61,24 @@ var func_add_music_list = function(){
 
             return false;
         }
-        
+        if (data.youtube_video_id === ""){
+            $( 'input[name=input_music_singer]' ).focus();
+
+            if ($( '#div-row-alert-form-list' ).length === 0){
+                $( '<div id="div-row-alert-form-list" class="row">' +
+                       '<div class="col-lg-12">' +
+                           '<div id="div-row-alert-messsage-form-list" class="alert alert-danger">' +
+                               'Youtube Video ID yang ingin diinput masih kosong !' +
+                           '</div>' +
+                       '</div>' +
+                   '</div>' ).insertBefore( '#div-row-form-music-list' );
+            }
+            else{
+                $(' #div-row-alert-messsage-form-list ').html('Youtube Video ID yang ingin diinput masih kosong !');
+            }
+
+            return false;
+        }
         if (data.album_image !== undefined){
           if (data.album_image.type !== 'image/jpg' && data.album_image.type !== 'image/jpeg'){
             $( 'input[name=input_image_album]' ).focus();
@@ -81,13 +99,12 @@ var func_add_music_list = function(){
             return false;
           }
         }
-        
-        return false;
 
         var formdata = new FormData();
         formdata.append('music_category', data.music_category);
         formdata.append('music_title', data.music_title);
         formdata.append('music_singer', data.music_singer);
+        formdata.append('youtube_video_id', data.youtube_video_id);
         formdata.append('image', data.album_image);
 
         $.ajax({
@@ -96,7 +113,8 @@ var func_add_music_list = function(){
             data : {
               music_category : data.music_category,
               music_title : data.music_title,
-              music_singer : data.music_singer
+              music_singer : data.music_singer,
+              youtube_video_id : data.youtube_video_id
             },
             url : window.location.origin + '/hidden/music/list/add',
             success : function(res){
@@ -257,6 +275,7 @@ var func_add_music_list = function(){
     func_music_list_table_click = function(value){
         $( 'input[name=input_music_title]' ).val($(value).children()[1].innerHTML).focus();
         $( 'input[name=input_music_singer]' ).val($(value).children()[2].innerHTML);
+        $( 'input[name=input_youtube_video_id' ).val($(value).children()[3].innerHTML);
     };
 
 $( '#musiccategory' ).change(function(){ func_music_category_handleonchange(this) });

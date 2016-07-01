@@ -8,6 +8,8 @@ router = function(app, express){
 	r.get('/music/category', h.user.music_category);
 	r.get('/popular/on/web', h.user.popular_on_web);
 	r.get('/about/us', h.user.about_us);
+	r.get('/play/:music_title/:music_singer', h.user.play);
+	r.post('/like', h.user.like);
 	app.use(r);	
 };
 

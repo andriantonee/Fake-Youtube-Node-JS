@@ -16,6 +16,8 @@ router = function(app, express, upload){
 	r.post('/hidden/music/list/add', h.admin.music_list_add);
 	r.post('/hidden/music/list/upload', upload.single('image'), h.admin.music_list_upload);
 	r.post('/hidden/music/list/delete', h.admin.music_list_delete);
+	r.post('/hidden/view', h.admin.view);
+	r.post('/hidden/like', h.admin.like);
 	app.use(r);	
 };
 

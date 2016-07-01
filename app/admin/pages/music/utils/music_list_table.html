@@ -3,6 +3,7 @@
 		<td>{{ number }}</td>
 		<td>{{ data["music_title"] }}</td>
         <td>{{ data["music_singer"] }}</td>
+        <td>{{ data["youtube_video_id"] }}</td>
         <td>
             {% if data["album_image_originalname"] != "No Image" %}
                 <a href="" data-toggle="modal" data-target="#modal{{ number }}">
@@ -39,6 +40,7 @@
                         <th>#</th>
                         <th>Music Title</th>
                         <th>Music Singer</th>
+                        <th>Youtube Video ID</th>
                         <th>Album Image</th>
                     </tr>
                 </thead>
