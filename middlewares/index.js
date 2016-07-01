@@ -25,17 +25,17 @@ middleware = function(app, globdir, express){
 	    next();
 	});
 
-	pg.defaults.ssl = true;
-	pg.connect(process.env.DATABASE_URL, function(err, client) {
-		if (err) throw err;
-		console.log('Connected to postgres! Getting schemas...');
+	// pg.defaults.ssl = true;
+	// pg.connect(process.env.DATABASE_URL, function(err, client) {
+	// 	if (err) throw err;
+	// 	console.log('Connected to postgres! Getting schemas...');
 
-		client
-		.query('SELECT * FROM user')
-		.on('row', function(row) {
-			console.log(JSON.stringify(row));
-		});
-	});
+	// 	client
+	// 	.query('SELECT * FROM user')
+	// 	.on('row', function(row) {
+	// 		console.log(JSON.stringify(row));
+	// 	});
+	// });
 
 	router.admin(app, express, upload);
 	router.user(app, express);
