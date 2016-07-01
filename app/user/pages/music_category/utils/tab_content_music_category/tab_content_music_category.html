@@ -21,12 +21,12 @@
                                     <h3>{{ data_list["music_title"] }}</h3>
                                 </div>
                                 <div class="thumbnail">
-                                    <img src="/img/{{ data_list['album_image_filename'] if data_list['album_image_originalname'] != 'No Image' else 'No Image.jpg' }}" alt="Generic placeholder thumbnail">
+                                    <img src="/img/{{ data_list['album_image_filename'] if data_list['album_image_originalname'] != 'No Image' else 'No Image.jpg' }}">
                                 </div>
                                 <div class="caption">
                                     <p>{{ data_list["music_singer"] }}</p>
                                     <p>
-                                        <a href="#" class="btn btn-primary" role="button">Play</a> 
+                                        <a href="/play/{{ data_list['music_title'] }}/{{ data_list['music_singer'] }}" class="btn btn-primary" role="button">Play</a> 
                                     </p>
                                 </div>
                             </div>

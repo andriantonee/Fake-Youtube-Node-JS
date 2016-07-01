@@ -21,12 +21,65 @@ var active_navbar = function(){
 
 home = function(req, res){
 	var home = {
-		active_navbar : active_navbar()
+		active_navbar : active_navbar(),
+		Hot : [],
+		Trending : [],
+		NewRelease : []
 	};
 
 	home.active_navbar.home = "class=active";
 
-	res.render('./user/pages/home/home.html', {home : home});
+	knex.select('music_list.music_title', 'music_list.music_singer', 'music_list.album_image_filename', 'music_list.album_image_originalname', 'music_list.view', 'alias.total', 'music_list.tanggal_waktu')
+		.from('music_list')
+		.leftJoin(knex.raw('(SELECT `music_title`, `music_singer`, COUNT(`music_title`) as total FROM `music_list_view` GROUP BY CONCAT(`music_title`,`music_singer`)) AS `alias`'), function(){
+			this.on('music_list.music_title', '=', 'alias.music_title').on('music_list.music_singer', '=', 'alias.music_singer');
+		})
+		.orderByRaw('`music_list`.`view` + `alias`.`total` desc, `music_list`.`tanggal_waktu` desc')
+		.limit(5)
+		.then(function(rows){
+			home.Hot = rows;
+
+			knex.select('music_list.music_title', 'music_list.music_singer', 'music_list.album_image_filename', 'music_list.album_image_originalname', 'music_list.like', 'alias.total', 'music_list.tanggal_waktu')
+				.from('music_list')
+				.leftJoin(knex.raw('(SELECT `music_title`, `music_singer`, COUNT(`music_title`) as total FROM `music_list_like` GROUP BY CONCAT(`music_title`,`music_singer`)) AS `alias`'), function(){
+					this.on('music_list.music_title', '=', 'alias.music_title').on('music_list.music_singer', '=', 'alias.music_singer');
+				})
+				.orderByRaw('`music_list`.`like` + `alias`.`total` desc, `music_list`.`tanggal_waktu` desc')
+				.limit(5)
+				.then(function(rows){
+					home.Trending = rows;
+
+					knex.select()
+						.table('music_list')
+						.orderBy('tanggal_waktu', 'desc')
+						.limit(9)
+						.then(function(rows){
+							home.NewRelease = rows;
+							
+							res.render('./user/pages/home/home.html', {home : home});
+						})
+						.catch(function(rows){
+							res.render('./user/pages/home/home.html', {home : home});
+						});
+				})
+				.catch(function(err){
+					res.render('./user/pages/home/home.html', {home : home});
+				});
+		})
+		.catch(function(err){
+			res.render('./user/pages/home/home.html', {home : home});
+		});
+	// knex.select('music_title', 'music_singer', knex.raw('COUNT(`music_title`) as total'))
+	// 	.table('music_list_view')
+	// 	.groupByRaw('CONCAT(`music_title`,`music_singer`)')
+	// 	.then(function(rows){
+	// 		console.log(rows);
+	// 		res.render('./user/pages/home/home.html', {home : home});
+	// 	})
+	// 	.catch(function(err){
+	// 		console.log(err);
+	// 		res.render('./user/pages/home/home.html', {home : home});
+	// 	});
 };
 
 music_category = function(req, res){

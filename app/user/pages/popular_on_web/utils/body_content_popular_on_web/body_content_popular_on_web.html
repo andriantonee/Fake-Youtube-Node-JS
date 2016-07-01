@@ -6,12 +6,12 @@
                     <div class="col-sm-4">
                         <div class="row">
                             <div class="col-sm-4">
-                                <img src="/img/{{ data['album_image_filename'] if data['album_image_originalname'] != 'No Image' else 'No Image.jpg' }}" alt="Generic placeholder thumbnail" class="img-responsive">
+                                <img src="/img/{{ data['album_image_filename'] if data['album_image_originalname'] != 'No Image' else 'No Image.jpg' }}" class="img-responsive">
                             </div>
                             <div class="col-sm-8">
                                 <p>{{ data["music_title"] }}</p>
                                 <p>
-                                    <a href="#" class="btn btn-primary" role="button">Play</a> 
+                                    <a href="/play/{{ data['music_title'] }}/{{ data['music_singer'] }}" class="btn btn-primary" role="button">Play</a>
                                 </p>
                             </div>
                         </div>

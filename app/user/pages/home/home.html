@@ -1,5 +1,7 @@
 {% extends "../index.html" %}
 {% import "../../widgets/navbar/navbar.html" as navbar %}
+{% import "../../widgets/copyright/copyright.html" as copyright %}
+{% import "./utils/home_carousel/home_carousel.html" as home_carousel %}
 
 {% block title %}Revolution - Home{% endblock %}
 
@@ -19,180 +21,39 @@
 {% block content %}
     {{ navbar.main(home["active_navbar"]) }}
 
-    <div class = "container">
-        <div class = " col-sm-6">
-            <h3 class ="title">Hot</h3> <hr/>
-            <div id="myCarousel" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators">
-                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                    <li data-target="#myCarousel" data-slide-to="1"></li>
-                    <li data-target="#myCarousel" data-slide-to="2"></li>
-                </ol>
-            
-                <div class="carousel-inner" role="listbox">
-                    <div class="embed-responsive embed-responsive-16by9 item active">
-                        <iframe class= "embed-responsive-item" width="100%"
-                            src="http://www.youtube.com/embed/X0gtzHJphVg?autoplay=1showinfo=0controls=0"frameborder="0">
-                        </iframe>
-                        <div class="carousel-caption">
-                            <h3>video..</h3>
-                            <p>Bla.. bla..</p>
-                        </div>
-                    </div>
-                
-                    <div class="embed-responsive embed-responsive-16by9 item">
-                        <iframe class= "embed-responsive-item" width="100%"
-                            src="http://www.youtube.com/embed/X0gtzHJphVg?autoplay=1showinfo=0controls=0"frameborder="0">
-                        </iframe>
-                        <div class="carousel-caption">
-                            <h3>video..</h3>
-                            <p>Bla.. bla..</p>
-                        </div>
-                    </div>
-                    
-                    <div class="embed-responsive embed-responsive-16by9 item">
-                        <iframe class= "embed-responsive-item" width="100%"
-                            src="http://www.youtube.com/embed/X0gtzHJphVg?autoplay=1showinfo=0controls=0"frameborder="0">
-                        </iframe>
-                        <div class="carousel-caption">
-                            <h3>video..</h3>
-                            <p>Bla.. bla..</p>
-                        </div>
-                    </div>
-                </div>
-            
-                    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
-            </div>
+    <div class="container">
+        <div class="col-sm-6">
+            {{ home_carousel.main("Hot", home["Hot"]) }}
         </div>
-    
-        <div class = " col-sm-6">
-            <h3 class="title">Trending</h3> <hr/>
-            <div id="myCarousel1" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators">
-                    <li data-target="#myCarousel1" data-slide-to="0" class="active"></li>
-                    <li data-target="#myCarousel1" data-slide-to="1"></li>
-                    <li data-target="#myCarousel1" data-slide-to="2"></li>
-                </ol>
-            
-                <div class="carousel-inner" role="listbox">
-                    <div class="embed-responsive embed-responsive-16by9 item active">
-                        <iframe class= "embed-responsive-item" width="100%"
-                            src="http://www.youtube.com/embed/X0gtzHJphVg?autoplay=1showinfo=0controls=0"frameborder="0">
-                        </iframe>
-                        <div class="carousel-caption">
-                            <h3>video..</h3>
-                            <p>Bla.. bla..</p>
-                        </div>
-                    </div>
-                
-                    <div class="embed-responsive embed-responsive-16by9 item">
-                        <iframe class= "embed-responsive-item" width="100%"
-                            src="http://www.youtube.com/embed/X0gtzHJphVg?autoplay=1showinfo=0controls=0"frameborder="0">
-                        </iframe>
-                        <div class="carousel-caption">
-                            <h3>video..</h3>
-                            <p>Bla.. bla..</p>
-                        </div>
-                    </div>
-                    
-                    <div class="embed-responsive embed-responsive-16by9 item">
-                        <iframe class= "embed-responsive-item" width="100%"
-                            src="http://www.youtube.com/embed/X0gtzHJphVg?autoplay=1showinfo=0controls=0"frameborder="0">
-                        </iframe>
-                        <div class="carousel-caption">
-                            <h3>video..</h3>
-                            <p>Bla.. bla..</p>
-                        </div>
-                    </div>
-                </div>
-            
-                    <a class="left carousel-control" href="#myCarousel1" role="button" data-slide="prev">
-                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="right carousel-control" href="#myCarousel1" role="button" data-slide="next">
-                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
-            </div>
+        
+        <div class="col-sm-6">
+            {{ home_carousel.main("Trending", home["Trending"]) }}
         </div>
     </div>
-        
-    <section class = "section-title">
+    
+    <section class="section-title">
         <h2>New Release</h2>
     </section>
     
     <div class="container text-left">
-        <div class = "row">
-            <div class="col-sm-4">
-                <div class="video">
-                    <img src="http://placehold.it/150x80?text=IMAGE">
+        {% for data in home["NewRelease"] %}
+            {% if loop.index0 % 3 == 0 %}<div class="row">{% endif %}
+                <div class="col-sm-4">
+                    <div class="col-sm-4">
+                        <div class="video">
+                            <img src="/img/{{ data['album_image_filename'] if data['album_image_originalname'] != 'No Image' else 'No Image.jpg' }}" class="img-responsive">
+                        </div>
+                    </div>
+                    <div class="deskripsi">
+                        <p>{{ data["music_title"] }}</p>
+                        <p>{{ data["music_singer"] }}</p>
+                    </div>
                 </div>
-                <div class="deskripsi">
-                    <p>Judul</p>
-                    <p>bla.. bla..</p>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="video">
-                    <img src="http://placehold.it/150x80?text=IMAGE">
-                </div>
-                <div class="deskripsi">
-                    <p>Judul</p>
-                    <p>bla.. bla..</p>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="video">
-                    <img src="http://placehold.it/150x80?text=IMAGE">
-                </div>
-                <div class="deskripsi">
-                    <p>Judul</p>
-                    <p>bla.. bla..</p>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-4">
-                <div class="video">
-                    <img src="http://placehold.it/150x80?text=IMAGE">
-                </div>
-                <div class="deskripsi">
-                    <p>Judul</p>
-                    <p>bla.. bla..</p>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="video">
-                    <img src="http://placehold.it/150x80?text=IMAGE">
-                </div>
-                <div class="deskripsi">
-                    <p>Judul</p>
-                    <p>bla.. bla..</p>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="video">
-                    <img src="http://placehold.it/150x80?text=IMAGE">
-                </div>
-                <div class="deskripsi">
-                    <p>Judul</p>
-                    <p>bla.. bla..</p>
-                </div>
-            </div>
-        </div>
+            {% if loop.index0 % 3 == 2 or loop.last == true %}</div>{% endif %}
+        {% endfor %}
     </div>
     
-    <div class="container-fluid text-center">
-        CopyRight &copy;2016 Vevo
-    </div>
+    {{ copyright.main() }}
 {% endblock %}
 
 {% block JS %}
