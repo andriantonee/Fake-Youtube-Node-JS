@@ -4,6 +4,24 @@
 		<td>{{ data["music_title"] }}</td>
         <td>{{ data["music_singer"] }}</td>
         <td>{{ data["youtube_video_id"] }}</td>
+        <td id="lyric{{ number }}">
+            <a href="" data-toggle="modal" data-target="#modallyric{{ number }}">
+                Show Lyric
+            </a>
+            <div class="modal fade" id="modallyric{{ number }}" tabindex="-1" role="dialog" aria-labelledby="modallyric{{ number }}Label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="mymodallyric{{ number }}">#{{ number }} - {{ data["music_title"] }} - {{ data["music_singer"] }} - Lyric</h4>
+                        </div>
+                        <div class="modal-body">
+                            <pre id="targetlyric{{ number }}">{{ data["lyric"] }}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </td>
         <td>
             {% if data["album_image_originalname"] != "No Image" %}
                 <a href="" data-toggle="modal" data-target="#modal{{ number }}">
@@ -14,7 +32,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title" id="myModalLabel">#{{ number }} - {{ data["music_title"] }} - {{ data["music_singer"] }} - {{ data["album_image_originalname"] }}</h4>
+                                <h4 class="modal-title" id="mymodal{{ number }}">#{{ number }} - {{ data["music_title"] }} - {{ data["music_singer"] }} - {{ data["album_image_originalname"] }}</h4>
                             </div>
                             <div class="modal-body">
                                 <div class="thumbnail">
@@ -41,6 +59,7 @@
                         <th>Music Title</th>
                         <th>Music Singer</th>
                         <th>Youtube Video ID</th>
+                        <th>Lyric</th>
                         <th>Album Image</th>
                     </tr>
                 </thead>

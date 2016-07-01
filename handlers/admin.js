@@ -243,8 +243,8 @@ music_list_category = function(req, res){
 											music_list.music_category_combobox[i].selected = "";
 										}
 									};
-
-									knex.select('music_title','music_singer', 'youtube_video_id','album_image_filename','album_image_originalname')
+									
+									knex.select('music_title','music_singer', 'youtube_video_id', 'lyric','album_image_filename','album_image_originalname')
 										.table('music_list')
 										.where({
 											music_category : req.params["category"]
@@ -522,6 +522,7 @@ music_list_add = function(req, res){
 									music_title : req.body.music_title,
 									music_singer : req.body.music_singer,
 									youtube_video_id : req.body.youtube_video_id,
+									lyric : req.body.lyric,
 									album_image_filename : "",
 									album_image_originalname : "No Image",
 									album_image_path : "",

@@ -34,7 +34,7 @@ home = function(req, res){
 		.leftJoin(knex.raw('(SELECT `music_title`, `music_singer`, COUNT(`music_title`) as total FROM `music_list_view` GROUP BY CONCAT(`music_title`,`music_singer`)) AS `alias`'), function(){
 			this.on('music_list.music_title', '=', 'alias.music_title').on('music_list.music_singer', '=', 'alias.music_singer');
 		})
-		.orderByRaw('`music_list`.`view` + `alias`.`total` desc, `music_list`.`tanggal_waktu` desc')
+		.orderByRaw('`music_list`.`view` + IFNULL(`alias`.`total`, 0) desc, `music_list`.`tanggal_waktu` desc')
 		.limit(5)
 		.then(function(rows){
 			home.Hot = rows;
@@ -44,7 +44,7 @@ home = function(req, res){
 				.leftJoin(knex.raw('(SELECT `music_title`, `music_singer`, COUNT(`music_title`) as total FROM `music_list_like` GROUP BY CONCAT(`music_title`,`music_singer`)) AS `alias`'), function(){
 					this.on('music_list.music_title', '=', 'alias.music_title').on('music_list.music_singer', '=', 'alias.music_singer');
 				})
-				.orderByRaw('`music_list`.`like` + `alias`.`total` desc, `music_list`.`tanggal_waktu` desc')
+				.orderByRaw('`music_list`.`like` + IFNULL(`alias`.`total`, 0) desc, `music_list`.`tanggal_waktu` desc')
 				.limit(5)
 				.then(function(rows){
 					home.Trending = rows;
@@ -151,7 +151,6 @@ popular_on_web = function(req, res){
 			res.render('./user/pages/popular_on_web/popular_on_web.html', {popular_on_web : popular_on_web});
 		})
 		.catch(function(err){
-			console.log(err);
 			res.render('./user/pages/popular_on_web/popular_on_web.html', {popular_on_web : popular_on_web});
 		});
 };
@@ -182,7 +181,7 @@ play = function(req, res){
 		.then(function(rows){
 			if (rows.length !== 0){
 				play.music_list = rows;
-				
+
 				knex('music_list_view')
 					.insert({
 						music_title : req.params["music_title"],
@@ -190,28 +189,91 @@ play = function(req, res){
 						tanggal_waktu : new Date(Date.now())
 					})
 					.then(function(music_list_view){
-						knex.select()
-							.table('music_list')
+						knex('music_list_view')
+							.count('music_title as total')
 							.where({
-								music_category : play.music_list[0].music_category
+								music_title : req.params["music_title"],
+								music_singer : req.params["music_singer"]
 							})
-							.whereNot(function(){
-								this.where({
-									music_title : req.params["music_title"],
-									music_singer : req.params["music_singer"]
-								});
-							})
-							.orderBy('tanggal_waktu', 'desc')
-							.limit(8)
 							.then(function(rows){
-								play.suggestion_content = rows;
+								play.music_list[0].view += rows[0].total;
 
-								res.render('./user/pages/play/play.html', {play : play});
+								knex('music_list_like')
+									.count('music_title as total')
+									.where({
+										music_title : req.params["music_title"],
+										music_singer : req.params["music_singer"]
+									})
+									.then(function(rows){
+										play.music_list[0].like += rows[0].total;
+
+										knex.select()
+											.table('music_list')
+											.where({
+												music_category : play.music_list[0].music_category
+											})
+											.whereNot(function(){
+												this.where({
+													music_title : req.params["music_title"],
+													music_singer : req.params["music_singer"]
+												});
+											})
+											.orderBy('tanggal_waktu', 'desc')
+											.limit(8)
+											.then(function(rows){
+												play.suggestion_content = rows;
+
+												var asyncTasks = [];
+
+												play.suggestion_content.forEach(function(item){
+													asyncTasks.push(function(callback){
+														knex('music_list_view')
+															.count('music_title as total')
+															.where({
+																music_title : item.music_title,
+																music_singer : item.music_singer
+															})
+															.then(function(rows){
+																item.view += rows[0].total;
+
+																knex('music_list_like')
+																	.count('music_title as total')
+																	.where({
+																		music_title : item.music_title,
+																		music_singer : item.music_singer
+																	})
+																	.then(function(rows){
+																		item.like += rows[0].total;
+
+																		callback();
+																	})
+																	.catch(function(err){
+																		callback();
+																	});
+															})
+															.catch(function(err){
+																callback();
+															});
+													});
+												});
+												async.parallel(asyncTasks, function(){
+												  	res.render('./user/pages/play/play.html', {play : play});
+												});
+											})
+											.catch(function(err){
+												res.status(404)
+													.end();
+											});
+									})
+									.catch(function(err){
+										res.status(404)
+											.end();
+									});
 							})
-							.catch(function(rows){
+							.catch(function(err){
 								res.status(404)
 									.end();
-							})
+							});
 					})
 					.catch(function(err){
 						res.status(404)
