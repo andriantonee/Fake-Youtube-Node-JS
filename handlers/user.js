@@ -141,18 +141,38 @@ popular_on_web = function(req, res){
 
 	popular_on_web.active_navbar.popular_on_web = "class=active";
 
-	knex.select()
-		.table('music_list')
-		.orderBy('tanggal_waktu')
+	knex.select('music_list.music_title', 'music_list.music_singer', 'music_list.album_image_filename', 'music_list.album_image_originalname', 'music_list.view', 'music_list.like', 'alias_view.total as total_view', 'alias_like.total as total_like', 'music_list.tanggal_waktu')
+		.from('music_list')
+		.leftJoin(knex.raw('(SELECT `music_title`, `music_singer`, COUNT(`music_title`) as total FROM `music_list_view` GROUP BY CONCAT(`music_title`,`music_singer`)) AS `alias_view`'), function(){
+			this.on('music_list.music_title', '=', 'alias_view.music_title').on('music_list.music_singer', '=', 'alias_view.music_singer');
+		})
+		.leftJoin(knex.raw('(SELECT `music_title`, `music_singer`, COUNT(`music_title`) as total FROM `music_list_like` GROUP BY CONCAT(`music_title`,`music_singer`)) AS `alias_like`'), function(){
+			this.on('music_list.music_title', '=', 'alias_like.music_title').on('music_list.music_singer', '=', 'alias_like.music_singer');
+		})
+		.orderByRaw('((`music_list`.`view` + IFNULL(`alias_view`.`total`, 0)) + ((`music_list`.`like` + IFNULL(`alias_like`.`total`, 0)) * 100)) desc, `music_list`.`tanggal_waktu` desc')
 		.limit(12)
 		.then(function(rows){
 			popular_on_web.body_content_popular_on_web = rows;
-			
+
 			res.render('./user/pages/popular_on_web/popular_on_web.html', {popular_on_web : popular_on_web});
 		})
 		.catch(function(err){
+			console.log(err);
+
 			res.render('./user/pages/popular_on_web/popular_on_web.html', {popular_on_web : popular_on_web});
-		});
+		})
+	// knex.select()
+	// 	.table('music_list')
+	// 	.orderBy('tanggal_waktu')
+	// 	.limit(12)
+	// 	.then(function(rows){
+	// 		popular_on_web.body_content_popular_on_web = rows;
+			
+	// 		res.render('./user/pages/popular_on_web/popular_on_web.html', {popular_on_web : popular_on_web});
+	// 	})
+	// 	.catch(function(err){
+	// 		res.render('./user/pages/popular_on_web/popular_on_web.html', {popular_on_web : popular_on_web});
+	// 	});
 };
 
 about_us = function(req, res){
@@ -300,23 +320,56 @@ like = function(req, res){
 				tanggal_waktu : new Date(Date.now())
 			})
 			.then(function(music_list_like){
-				res.json({
-					success : true,
-					message : 'Like berhasil bertambah'
-				})
+				knex.select('like')
+					.from('music_list')
+					.where({
+						music_title : req.body.music_title,
+						music_singer : req.body.music_singer
+					})
+					.then(function(rows){
+						var likevalue = rows[0].like;
+
+						knex('music_list_like')
+							.count('music_title as total')
+							.where({
+								music_title : req.body.music_title,
+								music_singer : req.body.music_singer
+							})
+							.then(function(rows){
+								likevalue += rows[0].total !== null ? rows[0].total : 0;
+
+								res.json({
+									success : true,
+									likevalue : likevalue,
+									message : 'Like berhasil bertambah'
+								});
+							})
+							.catch(function(err){
+								res.json({
+									success : false,
+									message : 'Like tidak berhasil bertambah'
+								});
+							});
+					})
+					.catch(function(err){
+						res.json({
+							success : false,
+							message : 'Like tidak berhasil bertambah'
+						});
+					});
 			})
 			.catch(function(err){
 				res.json({
 					success : false,
 					message : 'Like tidak berhasil bertambah'
-				})
+				});
 			});
 	}
 	else{
 		res.json({
 			success : false,
 			message : 'Like tidak berhasil bertambah'
-		})
+		});
 	}
 };
 

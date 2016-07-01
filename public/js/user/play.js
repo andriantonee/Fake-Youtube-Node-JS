@@ -7,7 +7,12 @@ var func_like_video = function(){
             method : 'POST',
             async : false,
             data : data,
-            url : window.location.origin + '/like'
+            url : window.location.origin + '/like',
+            success : function(res){
+            	if (res.success === true){
+            	     $( '#likevalue' )[0].innerHTML = res.likevalue.toString() + ' love';
+            	}
+            }
         });
 	};
 
