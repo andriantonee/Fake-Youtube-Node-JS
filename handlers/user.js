@@ -141,15 +141,9 @@ popular_on_web = function(req, res){
 
 	popular_on_web.active_navbar.popular_on_web = "class=active";
 
-	knex.select('music_list.music_title', 'music_list.music_singer', 'music_list.album_image_filename', 'music_list.album_image_originalname', 'music_list.view', 'music_list.like', 'alias_view.total as total_view', 'alias_like.total as total_like', 'music_list.tanggal_waktu')
-		.from('music_list')
-		.leftJoin(knex.raw('(SELECT `music_title`, `music_singer`, COUNT(`music_title`) as total FROM `music_list_view` GROUP BY CONCAT(`music_title`,`music_singer`)) AS `alias_view`'), function(){
-			this.on('music_list.music_title', '=', 'alias_view.music_title').on('music_list.music_singer', '=', 'alias_view.music_singer');
-		})
-		.leftJoin(knex.raw('(SELECT `music_title`, `music_singer`, COUNT(`music_title`) as total FROM `music_list_like` GROUP BY CONCAT(`music_title`,`music_singer`)) AS `alias_like`'), function(){
-			this.on('music_list.music_title', '=', 'alias_like.music_title').on('music_list.music_singer', '=', 'alias_like.music_singer');
-		})
-		.orderByRaw('((`music_list`.`view` + IFNULL(`alias_view`.`total`, 0)) + ((`music_list`.`like` + IFNULL(`alias_like`.`total`, 0)) * 100)) desc, `music_list`.`tanggal_waktu` desc')
+	knex.select()
+		.table('music_list')
+		.orderByRaw('`youtube_view` desc, `tanggal_waktu` desc')
 		.limit(12)
 		.then(function(rows){
 			popular_on_web.body_content_popular_on_web = rows;
@@ -157,10 +151,30 @@ popular_on_web = function(req, res){
 			res.render('./user/pages/popular_on_web/popular_on_web.html', {popular_on_web : popular_on_web});
 		})
 		.catch(function(err){
-			console.log(err);
-
 			res.render('./user/pages/popular_on_web/popular_on_web.html', {popular_on_web : popular_on_web});
 		})
+
+	/* Kedua Popular On Web */
+	// knex.select('music_list.music_title', 'music_list.music_singer', 'music_list.album_image_filename', 'music_list.album_image_originalname', 'music_list.view', 'music_list.like', 'alias_view.total as total_view', 'alias_like.total as total_like', 'music_list.tanggal_waktu')
+	// 	.from('music_list')
+	// 	.leftJoin(knex.raw('(SELECT `music_title`, `music_singer`, COUNT(`music_title`) as total FROM `music_list_view` GROUP BY CONCAT(`music_title`,`music_singer`)) AS `alias_view`'), function(){
+	// 		this.on('music_list.music_title', '=', 'alias_view.music_title').on('music_list.music_singer', '=', 'alias_view.music_singer');
+	// 	})
+	// 	.leftJoin(knex.raw('(SELECT `music_title`, `music_singer`, COUNT(`music_title`) as total FROM `music_list_like` GROUP BY CONCAT(`music_title`,`music_singer`)) AS `alias_like`'), function(){
+	// 		this.on('music_list.music_title', '=', 'alias_like.music_title').on('music_list.music_singer', '=', 'alias_like.music_singer');
+	// 	})
+	// 	.orderByRaw('((`music_list`.`view` + IFNULL(`alias_view`.`total`, 0)) + ((`music_list`.`like` + IFNULL(`alias_like`.`total`, 0)) * 100)) desc, `music_list`.`tanggal_waktu` desc')
+	// 	.limit(12)
+	// 	.then(function(rows){
+	// 		popular_on_web.body_content_popular_on_web = rows;
+
+	// 		res.render('./user/pages/popular_on_web/popular_on_web.html', {popular_on_web : popular_on_web});
+	// 	})
+	// 	.catch(function(err){
+	// 		res.render('./user/pages/popular_on_web/popular_on_web.html', {popular_on_web : popular_on_web});
+	// 	})
+
+	/* Pertama Popular On Web */
 	// knex.select()
 	// 	.table('music_list')
 	// 	.orderBy('tanggal_waktu')

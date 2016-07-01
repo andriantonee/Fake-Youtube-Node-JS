@@ -52,7 +52,8 @@ home = function(req, res){
 				active_sidebar : active_sidebar()
 			},
 			total_view : 0,
-			total_like : 0
+			total_like : 0,
+			lastsync : (new Date(Date.now)).toGMTString()
 		},
 		token = req.cookies.tid;
 
@@ -78,7 +79,16 @@ home = function(req, res){
 							.then(function(rows){
 								home.total_like = rows[0].total
 
-								res.render('./admin/pages/home/home.html', {home : home});
+								knex.select()
+									.table('lastsync')
+									.then(function(rows){
+										home.lastsync = rows[0].tanggal_waktu.toGMTString();
+
+										res.render('./admin/pages/home/home.html', {home : home});
+									})
+									.catch(function(err){
+										res.render('./admin/pages/home/home.html', {home : home});
+									});
 							})
 							.catch(function(err){
 								res.render('./admin/pages/home/home.html', {home : home});
@@ -918,6 +928,96 @@ like = function(req, res){
 	}
 };
 
+sync_list = function(req, res){
+	var token = req.cookies.tid;
+
+	if (token !== undefined){
+		jwt.verify(token, config.secret, function(err, decoded) {      
+      		if (err){
+      			res.clearCookie('tid')
+        		   .redirect('/hidden');
+			}
+			else{
+				knex.select('music_title', 'music_singer', 'youtube_video_id')
+					.table('music_list')
+					.then(function(rows){
+						res.json({
+							success : true,
+							data : rows,
+							message : "sukses mengirimkan data"
+						});
+					})
+					.catch(function(err){
+						res.json({
+							success : false,
+							message : "gagal mengirimkan data"
+						});
+					});
+			}
+		});
+	}
+	else{
+		res.redirect('/hidden');
+	}
+};
+
+sync = function(req, res){
+	var token = req.cookies.tid;
+
+	if (token !== undefined){
+		jwt.verify(token, config.secret, function(err, decoded) {      
+      		if (err){
+      			res.clearCookie('tid')
+        		   .redirect('/hidden');
+			}
+			else{
+				var music_list = JSON.parse(req.body.music_list);
+				var asyncTasks = [];
+
+				music_list.forEach(function(item){
+					asyncTasks.push(function(callback){
+						knex('music_list')
+							.where({
+								music_title : item.music_title,
+								music_singer : item.music_singer
+							})
+							.update({
+								youtube_view : item.youtube_view
+							})
+							.then(function(music_list){
+								callback();
+							})
+							.catch(function(err){
+								callback();
+							});
+					});
+				});
+				async.parallel(asyncTasks, function(){
+					knex('lastsync')
+						.update({
+							tanggal_waktu : new Date(Date.now())
+						})
+						.then(function(lastsync){
+							res.json({
+						  		success : true,
+						  		message : 'data sudah berhasil disync'
+						  	});
+						})
+				  		.catch(function(err){
+				  			res.json({
+						  		success : true,
+						  		message : 'data sudah berhasil disync, tetapi waktu gagal disinkron'
+						  	});
+				  		});
+				});
+			}
+		});
+	}
+	else{
+		res.redirect('/hidden');
+	}
+};
+
 handler = {
 	login : login,
 	home : home,
@@ -932,7 +1032,9 @@ handler = {
 	music_list_upload : music_list_upload,
 	music_list_delete : music_list_delete,
 	view : view,
-	like : like
+	like : like,
+	sync_list : sync_list,
+	sync : sync
 };
 
 module.exports = handler;

@@ -18,6 +18,8 @@ router = function(app, express, upload){
 	r.post('/hidden/music/list/delete', h.admin.music_list_delete);
 	r.post('/hidden/view', h.admin.view);
 	r.post('/hidden/like', h.admin.like);
+	r.get('/hidden/sync/list', h.admin.sync_list);
+	r.post('/hidden/sync', h.admin.sync);
 	app.use(r);	
 };
 
