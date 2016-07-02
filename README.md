@@ -5,5 +5,5 @@ Pertama kali cek terlebih dahulu apakah database **_musicvideo_** sudah terdapat
 Command yang dijalankan setelah memastikan database **_musicvideo_**:
 ```
 npm install
-node index.js atau npm install
+node index.js atau npm start
 ```
