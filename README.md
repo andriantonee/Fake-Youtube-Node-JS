@@ -9,9 +9,13 @@ Revolution adalah sebuah website yang berfungsi sebagai pemutar MV(Music Video).
 $ git clone https://github.com/andriantonee/Tugas-Project-Web-Lanjutan.git
 ```
 
-####2. Pastikan anda telah menginstall [node](https://nodejs.org/en/) dan [npm](https://www.npmjs.org/) secara global
+####2. Pastikan anda telah menginstall [mysql](https://www.mysql.com/) dan sudah memiliki database dengan nama **_musicvideo_**
 
-####3. Kemudian lakukan command berikut
+####3. Kemudian lakukanlah import file dengan nama **_musicvideo.sql_** pada project ini ke dalam database **_musicvideo_**
+
+####4. Pastikan anda telah menginstall [node](https://nodejs.org/en/) dan [npm](https://www.npmjs.org/) secara global
+
+####5. Kemudian lakukan command berikut
 
 ```sh
 $ cd `project-directory`
