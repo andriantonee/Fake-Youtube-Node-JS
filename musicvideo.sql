@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 01 Jul 2016 pada 08.41
+-- Generation Time: 02 Jul 2016 pada 14.13
 -- Versi Server: 10.1.13-MariaDB
 -- PHP Version: 5.6.21
 
@@ -19,6 +19,23 @@ SET time_zone = "+00:00";
 --
 -- Database: `knextest`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `lastsync`
+--
+
+CREATE TABLE `lastsync` (
+  `tanggal_waktu` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `lastsync`
+--
+
+INSERT INTO `lastsync` (`tanggal_waktu`) VALUES
+('2016-07-02 13:21:21');
 
 -- --------------------------------------------------------
 
@@ -50,7 +67,8 @@ CREATE TABLE `music_list` (
   `youtube_video_id` char(50) NOT NULL,
   `view` int(12) NOT NULL,
   `like` int(12) NOT NULL,
-  `lyric` text NOT NULL
+  `lyric` text NOT NULL,
+  `youtube_view` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

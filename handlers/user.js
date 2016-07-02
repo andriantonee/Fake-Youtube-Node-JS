@@ -12,9 +12,9 @@ var active_navbar = function(){
 		client: 'mysql',
 		connection: {
 			host     : '127.0.0.1',
-			user     : 'knexuser',
-			password : '12345',
-			database : 'knextest'
+			user     : 'root',
+			password : '',
+			database : 'musicvideo'
 		}
 	}),
 	async = require('async');
